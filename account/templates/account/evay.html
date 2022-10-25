@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Myform/SignUp</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css"
+        integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="container-fluid" >
+        <div class="container"
+            style="padding:20px; border:1px solid #aaa;width:50%;margin-top:5px;">
+            <div class="container">
+                <div class="container-fluid header" style="align-items: center;">
+                    <h3>SignUp</h3>
+                    <hr>
+                </div>
+                <!-- First name, lastname, Profile picture, username, Emailid, Password, 
+                Confirm Password,Address (Line1, city, state, pincode) -->
+                <form action="" method="POST">
+                    {% csrf_token %}
+
+                    <p><label for="firstname">First name : &nbsp;</label><input type="text" id="firstname" name="firstname" /></p>
+                    <p><label for="lastname">Last name : &nbsp;</label><input type="text" id="lastname" name="lastname"  /></p>
+                    <p><label for="profilepic">Profile picture : &nbsp;</label><input type="file" id="profilepic" name="profilepic" ></p>
+                    <!-- <p><label for="username">Username : &nbsp;</label>{{form1.username}}</p>
+                    <p><label for="email">Email : &nbsp;</label>{{form1.email}}</p>
+                    <p><label for="password">Password : &nbsp;</label>{{form1.password1}}</p>
+                    <p><label for="password">Confirm password : &nbsp;</label>{{form1.password2}}</p> -->
+                    <p><label for="username">Username : &nbsp;</label><input type="text" name="username" id="username" /></p>
+                    <p><label for="email">Email : &nbsp;</label><input type="email" name="username" id="username" /></p>
+                    <p><label for="password">Password : &nbsp;</label><input type="password" name="password" id="password"  onkeyup='check();' /></p>
+                    <span><label for="confirmpassword">Confirm password : &nbsp;</label><input type="password" name="confirmpassword" id="confirmpassword" onkeyup='check();'/></span>
+                    <span><input type="checkbox" id="checkpd"><span id='message'></span></span>
+                    <p><label class="my-3" for="address">Address: &nbsp;</label><input type="text" name="address" id="address"  placeholder="  (city, state, pincode)" /></p>
+                    {{form1.as_p}}
+                    <p><button type="submit">SignUp</button></p>
+                </form>
+                <p>If already registered, <a href="{% url 'LoginForm' %}">LogIn</a></p>
+            </div>
+            {% if form1.errors %}
+            {% for field in form1 %}
+            {% for error in field.errors %}
+            <div class="container my-2">
+                <div class="alert {{ message.tags }} alert-dismissible " role="alert" style="border:1px solid #aaa;padding:20px;">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    {{ error }}
+                </div>
+            </div>
+            {% endfor %}
+            {% endfor %}
+            {% endif %}
+
+        </div>
+    </div>
+
+
+    <!-- Optional Javascript -->
+    <!-- for dissimisible alert box  -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
+        crossorigin="anonymous"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            $('.alert').alert()
+        })
+        
+        // document.getElementById("checkpd").checked=false;
+        // var pd=document.getElementById("password").value;
+        // var conpd=document.getElementById("confirmpassword").value;
+        // if(pd===conpd){
+        //     document.getElementById("checkpd").checked=true;
+        // }
+        // else{
+        //     document.getElementById("checkpd").checked=false;
+        // }
+        var check = function() {
+            if (document.getElementById('password').value!==null && document.getElementById('confirmpassword').value!==null && document.getElementById('password').value == document.getElementById('confirmpassword').value) {
+                document.getElementById('message').style.color = 'green';
+                document.getElementById('message').innerHTML = ' matching';
+                document.getElementById("checkpd").checked=true;
+            } else {
+                document.getElementById('message').style.color = 'red';
+                document.getElementById('message').innerHTML = ' not matching';
+                document.getElementById("checkpd").checked=false;
+            }
+        }
+    </script>
+
+</body>
+
+</html>

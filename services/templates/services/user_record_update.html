@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Myform/DetailsForm</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css"
+        integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        .img-zoom-container {
+            position: relative;
+        }
+
+        .img-zoom-lens {
+            position: absolute;
+            border: 1px solid #d4d4d4;
+            /*set the size of the lens:*/
+            width: 40px;
+            height: 40px;
+        }
+
+        .img-zoom-result {
+            border: 1px solid #d4d4d4;
+            /*set the size of the result div:*/
+            width: 300px;
+            height: 300px;
+        }
+    </style>
+    <script>
+        function imageZoom(imgID, resultID) {
+            var img, lens, result, cx, cy;
+            img = document.getElementById(imgID);
+            result = document.getElementById(resultID);
+            /* Create lens: */
+            lens = document.createElement("DIV");
+            lens.setAttribute("class", "img-zoom-lens");
+            /* Insert lens: */
+            img.parentElement.insertBefore(lens, img);
+            /* Calculate the ratio between result DIV and lens: */
+            cx = result.offsetWidth / lens.offsetWidth;
+            cy = result.offsetHeight / lens.offsetHeight;
+            /* Set background properties for the result DIV */
+            result.style.backgroundImage = "url('" + img.src + "')";
+            result.style.backgroundSize = (img.width * cx) + "px " + (img.height * cy) + "px";
+            /* Execute a function when someone moves the cursor over the image, or the lens: */
+            lens.addEventListener("mousemove", moveLens);
+            img.addEventListener("mousemove", moveLens);
+            /* And also for touch screens: */
+            lens.addEventListener("touchmove", moveLens);
+            img.addEventListener("touchmove", moveLens);
+            function moveLens(e) {
+                var pos, x, y;
+                /* Prevent any other actions that may occur when moving over the image */
+                e.preventDefault();
+                /* Get the cursor's x and y positions: */
+                pos = getCursorPos(e);
+                /* Calculate the position of the lens: */
+                x = pos.x - (lens.offsetWidth / 2);
+                y = pos.y - (lens.offsetHeight / 2);
+                /* Prevent the lens from being positioned outside the image: */
+                if (x > img.width - lens.offsetWidth) { x = img.width - lens.offsetWidth; }
+                if (x < 0) { x = 0; }
+                if (y > img.height - lens.offsetHeight) { y = img.height - lens.offsetHeight; }
+                if (y < 0) { y = 0; }
+                /* Set the position of the lens: */
+                lens.style.left = x + "px";
+                lens.style.top = y + "px";
+                /* Display what the lens "sees": */
+                result.style.backgroundPosition = "-" + (x * cx) + "px -" + (y * cy) + "px";
+            }
+            function getCursorPos(e) {
+                var a, x = 0, y = 0;
+                e = e || window.event;
+                /* Get the x and y positions of the image: */
+                a = img.getBoundingClientRect();
+                /* Calculate the cursor's x and y coordinates, relative to the image: */
+                x = e.pageX - a.left;
+                y = e.pageY - a.top;
+                /* Consider any page scrolling: */
+                x = x - window.pageXOffset;
+                y = y - window.pageYOffset;
+                return { x: x, y: y };
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <div class="container-fluid" style="align-items: center;justify-content: center;margin-top:2vh;">
+        <div class="header">
+            <span style="font-size: 2rem;margin-left:10vw;">User Record form </span>
+            <span><a href="{% url 'user_records' %}"
+                    style="border:1px solid grey;padding:5px;float:right;margin-right:10%;">Back</a></span>
+            <hr>
+            {% if recordform.errors %}
+            {% for field in recordform %}
+            {% for error in field.errors %}
+            <div class="container my-2">
+                <div class="alert {{ message.tags }} alert-dismissible " role="alert"
+                    style="border:1px solid #aaa;padding:20px;">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    {{ error }}
+                </div>
+            </div>
+            {% endfor %}
+            {% endfor %}
+            {% endif %}
+        </div>
+        <div class="container" style="margin-left:10%;border:1px solid #aaa;padding:40px;">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-3">
+                        {% if record.vehicle_image %}
+                        <img src="{{record.vehicle_image.url}}" alt="Profile_pic"
+                            style="width:15vw;border:1px solid grey;padding:5px;margin:1vw;">
+                        {%endif%}
+                        {% if record.license_plate_image %}
+                        <img src="{{record.license_plate_image.url}}" alt="Profile_pic"
+                            style="width:15vw;border:1px solid grey;padding:5px;margin:1vw;">
+                        {%endif%}
+
+                    </div>
+                    <div class="col-md-9">
+
+                        {{recordform.as_p}}
+                    </div>
+                    <input type="Submit" value="Submit" />
+                </div>
+            </form>
+        </div>
+        <div class="container-fluid" style="margin-top:10vh;">
+            {% if record.vehicle_image %}
+            <div class="img-zoom-container" style="float:left;display:block;margin-left:10vw;">
+                <h3>Vehicle Image :-</h3>
+                <img id="myimage" src="{{record.vehicle_image.url}}"
+                    style="width:20vw;border:1px solid grey;padding:5px;margin:1vw;">
+                <div id="myresult" class="img-zoom-result"></div>
+            </div>
+            {%endif%}
+            {% if record.license_plate_image %}
+            <div class="img-zoom-container" style="float:right;display:block;margin-right:10vw;">
+                <h3>license_plate_image :-</h3>
+                <img id="my2image" src="{{record.license_plate_image.url}}"
+                    style="width:20vw;border:1px solid grey;padding:5px;margin:1vw;">
+                <div id="my2result" class="img-zoom-result"></div>
+            </div>
+
+            {%endif%}
+
+        </div>
+
+    </div>
+    <script>
+        // Initiate zoom effect:
+        imageZoom("myimage", "myresult");
+        imageZoom("my2image", "my2result");
+    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
+        crossorigin="anonymous"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            $('.alert').alert()
+        })
+
+    </script>
+
+</body>
+
+</html>
