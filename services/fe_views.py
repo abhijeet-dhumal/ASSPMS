@@ -72,7 +72,7 @@ from PIL import Image
 import base64
 from io import BytesIO
 from urllib.request import urlopen
-from services.nanonets_ocr_sample_python.code.prediction import license_plate_text_detection
+from services.code.prediction import license_plate_text_detection
 def UserRecordUpdate(request,pk):
     instance = get_object_or_404(UserRecord, id=pk)
     recordform=UserRecordForm(request.POST or None, instance=instance)

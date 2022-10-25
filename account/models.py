@@ -67,7 +67,7 @@ class UserManager(BaseUserManager):
 
         return self._create_user(email, password, **extra_fields)
 
-from services.nanonets_ocr_sample_python.code.prediction import license_plate_text_detection
+from services.code.prediction import license_plate_text_detection
 
 class User(AbstractUser):
     username = None

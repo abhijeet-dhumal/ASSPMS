@@ -6,7 +6,7 @@ STATUS = (
     ('unknown', 'unknown')
 )
 
-from services.nanonets_ocr_sample_python.code.prediction import license_plate_text_detection
+from services.code.prediction import license_plate_text_detection
 
 class UserRecord(TimeStampedModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
