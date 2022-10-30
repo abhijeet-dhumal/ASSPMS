@@ -16,7 +16,7 @@ from django.utils.encoding import smart_str, smart_bytes, DjangoUnicodeDecodeErr
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
-from account.utils import Util
+from commons.utils import Util
 from account.models import RequestUpdateProfile, User
 
 from account.serializers import (

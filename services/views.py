@@ -24,10 +24,10 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework import status
 
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
-from account.utils import Util
+from commons.utils import Util
 # API views
 
-class UserRecordAPIView(ListAPIView):
+class UserRecordAPIView(ModelViewSet):
     queryset = UserRecord.objects.all()
     serializer_class = UserRecordSerializer
     # permission_classes = (IsAuthenticated,)

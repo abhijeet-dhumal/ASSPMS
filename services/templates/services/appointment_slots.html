@@ -15,8 +15,12 @@
         <div class="container"
             style="width:60vw;padding:30px;display:flex; border:1px solid #aaa;margin:5vh 20vw 15vh 20vw;">
             <div class="container">
-                <h3>User Records</h3><a href="{% url 'user_record_create' %}">Create</a><a href="{% url 'dashboard' %}" class="mx-3">Home</a><hr>
-                <form class="form-inline my-2 my-lg-0" action="{% url 'user_records' %}">
+                <h3>AppointmentSlots</h3>
+                <a href="{% url 'user_appointment_slots_create' %}">Create</a>
+                <a href="{% url 'dashboard' %}" class="mx-3">Home</a>
+                <a href="{{request.META.HTTP_REFERER}}">Go back</a>
+                <hr>
+                <form class="form-inline my-2 my-lg-0" action="{% url 'user_appointment_slots' %}">
                     <input class="form-control mr-sm-2" type="search"   placeholder="Search" aria-label="Search" name="search">
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                 </form><hr>
@@ -28,13 +32,12 @@
                             <thead>
                                 <tr>
                                     <th scope="col">#</th>
-                                    <th scope="col">User</th>
+                                    <th scope="col">Date</th>
                                     <!-- <th scope="col">Firstname</th>
                                         <th scope="col">Lastname</th> -->
-                                    <th scope="col">License plate</th>
-                                    <th scope="col">Status</th>
-                                    <th scope="col">Created_at</th>
-                                    <th scope="col">Updated_at</th>
+                                    <th scope="col">Start time</th>
+                                    <th scope="col">End time</th>
+                                    <th scope="col">Verified</th>
                                     <th scope="col"></th>
                                     <th scope="col"></th>
                 
@@ -46,19 +49,16 @@
                                 <tr>
                                     
                                     <th scope="row">{{detail.id}}</th>
-                                    <td>{{detail.created_by}}</a></td>
+                                    <td>{{detail.date}}</a></td>
                                     <!-- <td>{{profiledetails.first_name}}</a></td>
                                         <td>{{profiledetails.last_name}}</a></td> -->
-                                    {% if detail.licenseplatetext %}
-                                        <td>{{detail.licenseplatetext}}</td>
-                                    {% else %} <td>Not verified !</td>
-                                    {% endif %}
-                                    <td>{{detail.status}}</td>
-                                    <td>{{detail.created_at}}</td>
-                                    <td>{{detail.updated_at}}</td>
+                                    <td>{{detail.start_time}}</td>
+                                    
+                                    <td>{{detail.end_time}}</td>
+                                    <td>{{detail.is_verified}}</td>
                                                    
-                                    <td><a href="{% url 'user_record_update' detail.id %}">Update</a></td>
-                                    <td><a href="{% url 'user_record_delete' detail.id %}">Delete</a></td>
+                                    <td><a href="{% url 'user_appointment_slots_update' detail.id %}">Update</a></td>
+                                    <td><a href="{% url 'user_appointment_slots_delete' detail.id %}">Delete</a></td>
                                     
                                 </tr>
                                 {% endfor %}

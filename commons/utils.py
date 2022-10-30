@@ -1,3 +1,14 @@
+from django.db import models
+from account.models import User
+
+class TimeStampedModel(models.Model):
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE,null=True,blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True)
+    class Meta:
+        abstract = True
+
+
 from rest_framework import serializers 
 
 from django.core.mail import EmailMessage

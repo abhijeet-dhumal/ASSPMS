@@ -24,22 +24,33 @@
                     <div class="content" style="align-items:center;text-align:center;">
 
                         <div class="icon d-flex">
-                            <p class="m-0 p-0"><a href=""><i class="fas fa-user"></i></i>{{detail.id}}
+                            <p class="m-0 p-0"><a href=""><i class="fas fa-user"></i></i>
                                 </a>
                             </p><br>
-                            <p class="m-0 p-0"><a href=""><i class="fas fa-money-check-alt"></i>{{detail.text}}</a>
+                            <p class="m-0 p-0"><a href=""><i class="fas fa-money-check-alt"></i></a>
                             </p>
                             <br>
 
                         </div>
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    
+                                    <th scope="row">{{detail.id}}</th>
+                                    <td>{{detail.text}}</a></td>
+                                    
+                                </tr>
+                                
+                            </tbody>
+                        </table>
 
                     </div>
                 </div>
                 {% endfor %}
                 {% else %}
                 <div class="container-fluid" style="align-items: center;text-align: center;">
-                    <h3>No records found for this user !!! </h3>
-                </div>>
+                    <p>No records found for this user !!! </p>
+                </div>
                 {% endif %}
             </div>
 

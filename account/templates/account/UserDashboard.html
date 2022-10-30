@@ -25,14 +25,23 @@
         <div class="container col-md-6" style="padding:30px;border:1px solid #aaa;margin-top: 10px;">
             <div class="container">
                 <h3>Hello {{request.user}} !!!</h3>
-                <a href="{% url 'user_records' %}">UserRecords</a>
+                {% if request.user.is_staff %}
+                <a href="{% url 'user_records' %}" class="mx-2">UserRecords</a>
+                <a href="{% url 'user_appointment_slots' %}">Appointment slots</a>
+                {% else %}
+                <a href="{% url 'user_appointments' %}">Appointments</a>
+                {% endif %}
                 <a href="{% url 'user_notifications' %}" class="mx-2">Notifications</a>
                 <a href="{% url 'logoutuser' %}" class="mx-2">LogOut</a>
             </div>
             <hr>
-            
+            <form class="form-inline my-2 my-lg-0 d-flex" action="{% url 'dashboard' %}">
+                <input class="form-control mr-sm-2 mx-2" style="width:min-content;" type="search"   placeholder="Search" aria-label="Search" name="search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form><hr>
             <div class="row">
                 <div class="col-md-6">
+                    
                     <table class="table">
                         <thead>
                             <tr>
@@ -44,6 +53,7 @@
                             </tr>
                         </thead>
                         <tbody>
+                            {% if request.user.is_staff %}
                             {% for user in users %}
                             <tr>
                                 <th scope="row">{{user.id}}</th>
@@ -53,9 +63,18 @@
                                 <th scope="row">{{user.user_type}}</th>
                             </tr>
                             {% endfor %}
-
+                            {% else %}
+                            <tr>
+                                <th scope="row">{{request.user.id}}</th>
+                                <td><a href="{% url 'userdetails' request.user.id %}">{% if request.user.first_name %}{{request.user.first_name}}{% else %}{{request.user.name}}{% endif %}</a>
+                                </td>
+                                <td>{{request.user.email}}</td>
+                                <th scope="row">{{request.user.user_type}}</th>
+                            </tr>
+                            {% endif %}
                         </tbody>
                     </table>
+                    
                 </div>
             </div>
             

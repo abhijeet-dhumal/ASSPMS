@@ -93,11 +93,11 @@
 </head>
 
 <body>
-    <div class="container-fluid" style="align-items: center;justify-content: center;margin-top:2vh;">
-        <div class="header">
-            <span style="font-size: 2rem;margin-left:10vw;">User Record form </span>
-            <span><a href="{% url 'user_records' %}"
-                    style="border:1px solid grey;padding:5px;float:right;margin-right:10%;">Back</a></span>
+    <div class="container-fluid" style="align-items: center;justify-content: center;margin-top:5vh; margin-bottom:5vh;">
+        <div class="header" style="margin-left:10vw;">
+            <span style="font-size: 2rem;">User Record form </span><br>
+            <span><a href="{% url 'user_appointments' %}" class="mx-3">Appointment slots</a></span>
+            <span><a href="{% url 'user_records' %}">Back</a></span>
             <hr>
             {% if recordform.errors %}
             {% for field in recordform %}
@@ -119,10 +119,11 @@
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         {% if record.vehicle_image %}
-                        <img src="{{record.vehicle_image.url}}" alt="Profile_pic"
+                        <img id="myimage" src="{{record.vehicle_image.url}}" alt="Profile_pic"
                             style="width:15vw;border:1px solid grey;padding:5px;margin:1vw;">
+                        <div id="myresult" class="img-zoom-result"></div>
                         {%endif%}
                         {% if record.license_plate_image %}
                         <img src="{{record.license_plate_image.url}}" alt="Profile_pic"
@@ -130,34 +131,16 @@
                         {%endif%}
 
                     </div>
-                    <div class="col-md-9">
+                    <div class="col-md-8">
 
                         {{recordform.as_p}}
+                        <input type="Submit" value="Submit" />
                     </div>
-                    <input type="Submit" value="Submit" />
+
                 </div>
             </form>
         </div>
-        <div class="container-fluid" style="margin-top:10vh;">
-            {% if record.vehicle_image %}
-            <div class="img-zoom-container" style="float:left;display:block;margin-left:10vw;">
-                <h3>Vehicle Image :-</h3>
-                <img id="myimage" src="{{record.vehicle_image.url}}"
-                    style="width:20vw;border:1px solid grey;padding:5px;margin:1vw;">
-                <div id="myresult" class="img-zoom-result"></div>
-            </div>
-            {%endif%}
-            {% if record.license_plate_image %}
-            <div class="img-zoom-container" style="float:right;display:block;margin-right:10vw;">
-                <h3>license_plate_image :-</h3>
-                <img id="my2image" src="{{record.license_plate_image.url}}"
-                    style="width:20vw;border:1px solid grey;padding:5px;margin:1vw;">
-                <div id="my2result" class="img-zoom-result"></div>
-            </div>
 
-            {%endif%}
-
-        </div>
 
     </div>
     <script>

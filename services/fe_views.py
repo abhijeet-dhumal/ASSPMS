@@ -1,7 +1,7 @@
 from time import timezone
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
-from services.forms import UserRecordForm
+from services.forms import AppointmentForm, AppointmentSlotForm, UserRecordForm
 from django.shortcuts import get_object_or_404
 from rest_framework.generics import ListCreateAPIView,ListAPIView
 from rest_framework.viewsets import ModelViewSet
@@ -32,8 +32,10 @@ class NotificationListView(ListView):
 
     def get_queryset(self, *args, **kwargs):
         request = self.request
-        return Notification.objects.filter(user=request.user).all()
+        return Notification.objects.filter(created_by=request.user).all()
 
+from django.shortcuts import render
+from django.db.models import Q  # New
 class UserRecordsListView(ListView):
     model = UserRecord
     template_name = 'services/user_record_list.html'
@@ -41,7 +43,28 @@ class UserRecordsListView(ListView):
 
     def get_queryset(self, *args, **kwargs):
         request = self.request
-        return UserRecord.objects.filter(user=request.user).all()
+        search_post = request.GET.get('search')
+        if search_post:
+            posts = UserRecord.objects.filter(Q(created_by__email__icontains=search_post) | Q(licenseplatetext__icontains=search_post) | Q(status__icontains=search_post)).order_by('-created_at')
+        else:
+            # If not searched, return default posts
+            posts = UserRecord.objects.filter(created_by=request.user).order_by('-created_at')
+        return posts
+
+class AppointmentSlotsListView(ListView):
+    model = AppointmentSlot
+    template_name = 'services/appointment_slots.html'
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self, *args, **kwargs):
+        request = self.request
+        search_post = request.GET.get('search')
+        if search_post:
+            posts = AppointmentSlot.objects.filter(Q(created_by__email__icontains=search_post) | Q(date__icontains=search_post) | Q(is_verified__icontains=search_post)).order_by('-created_at')
+        else:
+            # If not searched, return default posts
+            posts = AppointmentSlot.objects.filter(created_by=request.user).order_by('-created_at')
+        return posts
 
 
 class UserRecordsCreateView(CreateView):
@@ -50,48 +73,27 @@ class UserRecordsCreateView(CreateView):
     permission_classes = (IsAuthenticated,)
     fields="__all__"
 
-class UserRecordFormView(FormView):
-    model = UserRecord
-    template_name = 'services/user_records.html'
-    success_url = reverse_lazy('user_records') 
-    form_class=UserRecordForm
 
-    def form_valid(self, form):
-        record = form.save(commit=False)
-        record.save()
-        data = form.cleaned_data
-        UserRecord.objects.update_or_create(entry_time=data['entry_time'],
-        exit_time=data['exit_time'],
-        status=data['status'],
-        license_plate_text=data['license_plate_text'],
-        parking_slot_details=data['parking_slot_details']
-        ) 
-        return redirect('user_records')
-
-from PIL import Image
-import base64
-from io import BytesIO
-from urllib.request import urlopen
 from services.code.prediction import license_plate_text_detection
 def UserRecordUpdate(request,pk):
     instance = get_object_or_404(UserRecord, id=pk)
-    recordform=UserRecordForm(request.POST or None, instance=instance)
-
-    if recordform.is_valid():
-        recordform.save()
-        instance.updated_at=timezone.now()
-        # print(instance.updated_at)
-        # img = open('','rb')
-        img_url=instance.vehicle_image.url
-        text=str(img_url)[1:]
-        print(text)
-        texts=list()
-        for template in license_plate_text_detection(text):
-            texts.append(template['prediction'][0]['ocr_text'])
-        instance.license_plate_text=texts[0]
-        print(f'Found texts in this image are : {texts}')
-        instance.save()
-        return redirect('user_records')
+    recordform=UserRecordForm(instance=instance)
+    if request.method=='POST':
+        recordform=UserRecordForm(request.POST, request.FILES, instance=instance)
+        if recordform.is_valid():
+            recordform.save()
+            instance.updated_at=timezone.now()
+            if instance.vehicle_image:
+                img_url=instance.vehicle_image.url
+                text=str(img_url)[1:]
+                print(text)
+                texts=list()
+                for template in license_plate_text_detection(text):
+                    texts.append(template['prediction'][0]['ocr_text'])
+                instance.licenseplatetext=texts[0]
+                print(f'Found texts in this image are : {texts}')
+            instance.save()
+            return redirect('user_records')
     
     context={'recordform':recordform,'record':instance}
     return render(request,"services/user_record_update.html",context)
@@ -102,4 +104,80 @@ def UserRecordDelete(request,pk):
     if request.method == 'POST':
         userdetails.delete()
         return redirect('user_records')
+    return render(request,'services/delete.html', {'object': userdetails})
+
+from django.urls import reverse
+class AppointmentSlotCreateView(CreateView):
+    model = AppointmentSlot
+    template_name = 'services/user_records.html'
+    form_class= AppointmentSlotForm
+    permission_classes = (IsAuthenticated,)
+
+    def get_success_url(self):
+        return reverse('user_appointment_slots')
+
+def AppointmentSlotUpdate(request,pk):
+    instance = get_object_or_404(AppointmentSlot, id=pk)
+    recordform=AppointmentSlotForm(request.POST or None, instance=instance)
+
+    if recordform.is_valid():
+        recordform.save()
+        instance.updated_at=timezone.now()
+        instance.save()
+        return redirect('user_records')
+    
+    context={'recordform':recordform,'record':instance}
+    return render(request,"services/user_record_update.html",context)
+
+
+def AppointmentSlotDelete(request,pk):
+    userdetails=AppointmentSlot.objects.get(id=pk)
+    if request.method == 'POST':
+        userdetails.delete()
+        return redirect('user_appointment_slots')
+    return render(request,'services/delete.html', {'object': userdetails})
+
+
+class AppointmentListView(ListView):
+    model = Appointment
+    template_name = 'services/appointments.html'
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self, *args, **kwargs):
+        request = self.request
+        search_post = request.GET.get('search')
+        if search_post:
+            posts = Appointment.objects.filter(Q(created_by__email__icontains=search_post) | Q(slot__icontains=search_post) | Q(is_paid__icontains=search_post)| Q(amount__icontains=search_post)).order_by('-created_at')
+        else:
+            # If not searched, return default posts
+            posts = Appointment.objects.filter(created_by=request.user).order_by('-created_at')
+        return posts
+class AppointmentCreateView(CreateView):
+    model = Appointment
+    template_name = 'services/user_records.html'
+    form_class= AppointmentForm
+    permission_classes = (IsAuthenticated,)
+
+    def get_success_url(self):
+        return reverse('user_appointments')
+
+def AppointmentUpdate(request,pk):
+    instance = get_object_or_404(Appointment, id=pk)
+    recordform=AppointmentForm(request.POST or None, instance=instance)
+
+    if recordform.is_valid():
+        recordform.save()
+        instance.updated_at=timezone.now()
+        instance.save()
+        return redirect('user_records')
+    
+    context={'recordform':recordform,'record':instance}
+    return render(request,"services/user_record_update.html",context)
+
+
+def AppointmentDelete(request,pk):
+    userdetails=Appointment.objects.get(id=pk)
+    if request.method == 'POST':
+        userdetails.delete()
+        return redirect('user_appointments')
     return render(request,'services/delete.html', {'object': userdetails})

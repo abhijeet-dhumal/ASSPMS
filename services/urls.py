@@ -17,14 +17,30 @@ urlpatterns = [
 
     path('user_notifications', NotificationListView.as_view(),
          name='user_notifications'),
+    
+    path('user_appointment_slots', AppointmentSlotsListView.as_view(),
+         name='user_appointment_slots'),
+    path('user_appointment_slots_create', AppointmentSlotCreateView.as_view(),
+         name='user_appointment_slots_create'),  
+    path('user_appointment_slots_update/<int:pk>/',fe_views.AppointmentSlotUpdate, name='user_appointment_slots_update'),
+    path('user_appointment_slots_delete/<int:pk>/',fe_views.AppointmentSlotDelete, name='user_appointment_slots_delete'),     
+
+    path('user_appointments', AppointmentListView.as_view(),
+         name='user_appointments'),
+    path('user_appointments_create', AppointmentCreateView.as_view(),
+         name='user_appointments_create'),  
+    path('user_appointments_update/<int:pk>/',fe_views.AppointmentUpdate, name='user_appointments_update'),
+    path('user_appointments_delete/<int:pk>/',fe_views.AppointmentDelete, name='user_appointments_delete'),     
 
     # API endpoints 
-    path('parking_appointments', AppointmentAPIView.as_view(
+    path('api/user_records', UserRecordAPIView.as_view(
         {'get': 'list', 'post': 'create'}), name='appointments'),
-    path('parking_appointments/<int:pk>', AppointmentAPIView.as_view(
+    path('api/parking_appointments', AppointmentAPIView.as_view(
+        {'get': 'list', 'post': 'create'}), name='appointments'),
+    path('api/parking_appointments/<int:pk>', AppointmentAPIView.as_view(
         {'get': 'retrieve', 'patch': 'partial_update'}), name='appointment'),
-    path('parking_appointment_slots', AppointmentSlotAPIView.as_view(),
+    path('api/parking_appointment_slots', AppointmentSlotAPIView.as_view(),
          name='appointment_slots'),
-    path('notifications', NotificationAPIView.as_view(),
+    path('api/notifications', NotificationAPIView.as_view(),
          name='notifications')
 ]

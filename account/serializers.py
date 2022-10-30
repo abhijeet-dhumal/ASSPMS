@@ -6,12 +6,13 @@ from rest_framework.exceptions import AuthenticationFailed
 from django.contrib.auth.password_validation import validate_password
 from rest_framework.validators import UniqueValidator
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from account.models import RequestUpdateProfile, User, UserQuery
+from account.models import RequestUpdateProfile, User
+from services.models import UserQuery
 from django.core.files.uploadedfile import UploadedFile
 from io import BytesIO
 import requests
 import os
-from account.utils import Base64ImageField
+from commons.utils import Base64ImageField
 
 class RegisterSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(required=True, validators=[

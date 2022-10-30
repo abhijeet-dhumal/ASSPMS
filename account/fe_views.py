@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import authenticate ,login, logout
-from account.forms import UserRegisterForm, UserForm
+from account.forms import UserRegisterForm, UserEditForm
 from django.contrib import messages
 
 from account.models import User
@@ -49,18 +49,24 @@ def RegisterForm(request):
     context.update({'form1':form}) 
     return render(request, 'account/registerPage.html',context)
 
+from django.shortcuts import render
+from django.db.models import Q  # New
 @login_required
 def dashboard(request):
-    users=User.objects.all()
+    search_post = request.GET.get('search')
+    if search_post:
+        users = User.objects.filter(Q(email__icontains=search_post) | Q(name__icontains=search_post) | Q(user_type__icontains=search_post)).order_by('-created_at')
+    else:
+        users = User.objects.all().order_by('-created_at')
     context={'request':request,'users':users}
     return render(request,"account/UserDashboard.html",context)
 
 @login_required
 def userdetails(request,pk):
     userdetail=User.objects.get(id=pk)    
-    registerform=UserForm(instance=userdetail)
+    registerform=UserEditForm(instance=userdetail)
     if request.method=='POST':
-        registerform=UserForm(request.POST,request.FILES,instance=userdetail)
+        registerform=UserEditForm(request.POST,request.FILES,instance=userdetail)
         if registerform.is_valid():
             registerform.save()
             return redirect('dashboard')

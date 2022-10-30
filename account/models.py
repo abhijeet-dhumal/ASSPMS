@@ -2,13 +2,6 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-class TimeStampedModel(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True, null=True)
-    updated_at = models.DateTimeField(auto_now=True, null=True)
-
-    class Meta:
-        abstract = True
-
 User_Query_Status = (
     ('New', 'New'),
     ('InProgress', 'InProgress'),
@@ -91,28 +84,14 @@ class User(AbstractUser):
         blank=True, null=True, upload_to='profile/%Y%m%d')
     vehicle_image=models.ImageField(blank=True, null=True, upload_to='user_vehicle_images/%Y%m%d')
     license_plate_text=models.CharField(max_length=120, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
     objects = UserManager()
 
-
-class UserQuery(TimeStampedModel):
-    name = models.CharField(max_length=1024, blank=True, null=True)
-    pronoun = models.CharField(max_length=1024, blank=True, null=True)
-    phone = models.CharField(max_length=15, blank=True, null=True)
-    email = models.EmailField(max_length=512, blank=True, null=True)
-    query = models.TextField(blank=True, null=True)
-    status = models.CharField(max_length=512, blank=True, null=True)
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        ordering = ('-created_at',)
-
 class RequestUpdateProfile(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
     user_type = models.CharField(
         max_length=520, blank=True, choices=CATEGORY, default='User')
     name = models.CharField(max_length=520, blank=True, null=True)

@@ -26,24 +26,24 @@ urlpatterns = [
      path('logout/', fe_views.logoutuser, name ='logoutuser'),
 
      # REST FRAMEWORK URLS
-     path('api_register', RegisterView.as_view(), name='auth_register'),
-     path('api_login', MyObtainTokenPairView.as_view(), name='token_obtain_pair'),
-     path('api_login/refresh', TokenRefreshView.as_view(), name='token_refresh'),
-     path('api_profile', Profile.as_view(), name='profile'),
-     path('api_snippet', Snippet.as_view(), name='snippet'),
+     path('api/register', RegisterView.as_view(), name='auth_register'),
+     path('api/login', MyObtainTokenPairView.as_view(), name='token_obtain_pair'),
+     path('api/login/refresh', TokenRefreshView.as_view(), name='token_refresh'),
+     path('api/profile', Profile.as_view(), name='profile'),
+     path('api/snippet', Snippet.as_view(), name='snippet'),
 
      # forgot password
-     path('api_request-password-reset-email/', RequestPasswordResetEmail.as_view(),
+     path('api/request-password-reset-email/', RequestPasswordResetEmail.as_view(),
           name="request-password-reset-email"),
-     path('api_password-reset/<uidb64>/<token>/',
+     path('api/password-reset/<uidb64>/<token>/',
           PasswordTokenCheckAPI.as_view(), name='password-reset-confirm'),
-     path('api_password-reset-complete', SetNewPasswordAPIView.as_view(),
+     path('api/password-reset-complete', SetNewPasswordAPIView.as_view(),
           name='password-reset-complete'),
 
      # reset password after login
-     path('api_change-password', APIChangePasswordView.as_view(),
+     path('api/change-password', APIChangePasswordView.as_view(),
           name='change-password'),
 
-     path('api_request-update-profile/<int:pk>', RequestUpdateProfileView.as_view(),
+     path('api/request-update-profile/<int:pk>', RequestUpdateProfileView.as_view(),
           name='request-update-profile')
 ]
