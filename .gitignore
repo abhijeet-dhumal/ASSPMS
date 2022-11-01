@@ -109,7 +109,4 @@ ENV/
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
 
-# sqllite
-db.*
-
 logs
