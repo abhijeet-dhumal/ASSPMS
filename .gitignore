@@ -58,6 +58,9 @@ coverage.xml
 *.log
 local_settings.py
 
+#db file 
+*.sqlite3
+
 # Flask stuff:
 instance/
 .webassets-cache

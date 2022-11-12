@@ -35,6 +35,11 @@ def update_licenseplatetext(sender, instance, **kwargs):
             texts.append(template['prediction'][0]['ocr_text'])
         instance.licenseplatetext=texts[0]
         print(f'Found texts in this image are : {texts}')
+        try: 
+            user=User.objects.filter(license_plate_text=texts[0])[0]
+            instance.user=user
+        except Exception as e:
+            print(e)
         instance.save()
 
 
@@ -46,18 +51,20 @@ class AppointmentSlot(TimeStampedModel):
     end_time = models.TimeField(blank=False)
     slot_details = models.TextField(max_length=500, null=True, blank=True)
     is_verified = models.BooleanField(default=None, null=True)
+    fees = models.IntegerField(default=0,null=True,blank=True)
 
     def __str__(self):
         return "User: " + str(self.created_by) + " | Date: " + str(self.date)
 
+from commons.utils import Util
 class Appointment(TimeStampedModel):
-    slot = models.OneToOneField(AppointmentSlot, on_delete=models.CASCADE)
+    slot = models.OneToOneField(AppointmentSlot, on_delete=models.CASCADE,null=True,blank=True)
     is_accepted = models.BooleanField(default=None, null=True)
     is_paid = models.BooleanField(default=False)
     vehicle_image = models.ImageField(null=True, blank=True)
     license_plate = models.ImageField(null=True, blank=True)
     license_plate_text = models.CharField(max_length=50, null=True, blank=True)
-    amount = models.FloatField(null=True,blank=True)
+    amount = models.FloatField(default=0,null=True,blank=True)
 
     def __str__(self):
         if self.is_accepted:
@@ -67,30 +74,27 @@ class Appointment(TimeStampedModel):
         return str(self.created_by) + " | " + str(self.slot) + " | " + str(accepted)
 
     def save(self, *args, **kwargs):
-        # if self.is_accepted != None:
-        #     if self.is_accepted == True and self.is_paid == False:
-        #         notifications_obj = Notification(
-        #             user=self.user, is_accepted=True, appointment=self, text=f'{self.slot.professional_user.name} has accepted your appointment request.')
-        #     elif self.is_accepted == False and self.is_paid == False:
-        #         notifications_obj = Notification(
-        #             user=self.user, is_accepted=False, appointment=self, text=f'{self.slot.professional_user.name} has rejected your appointment request.')
-        #     elif self.is_accepted == True and self.is_paid == True:
-        #         notifications_obj = Notification(
-        #             user=self.user, is_accepted=True, appointment=self, text='Payment successful for this appointment.')
-
-        #     notifications_obj.save()
-
+        try:
+            if self.is_accepted != None:
+                if self.is_accepted == True and self.is_paid == False:
+                    notifications_obj = Notification(
+                        created_by=self.created_by, is_accepted=True,appointment=self, text=f'{self.created_by.name}, you have accepted "{self.slot}" appointment slot. Please continue with payment!')
+                elif self.is_accepted == False and self.is_paid == False:
+                    notifications_obj = Notification(
+                        created_by=self.created_by, is_accepted=False,appointment=self, text=f'{self.created_by.name},you have rejected "{self.slot}" appointment slot.')
+                elif self.is_accepted == True and self.is_paid == True and self.amount>=self.slot.fees:
+                    notifications_obj = Notification(
+                        created_by=self.created_by, is_accepted=True, appointment=self, text='Payment successful for this appointment.')
+                else:
+                    notifications_obj = Notification(
+                        created_by=self.created_by, is_accepted=True, appointment=self, text='Please complete appointment flow correctly!')
+            
+            Util.send_email(self.created_by.email, 'Admin Survelliance', notifications_obj.text)          
+            notifications_obj.save()
+        except Exception as e:
+            print(e)
+            pass
         super().save(*args, **kwargs)
-
-from commons.utils import Util
-class Notification(TimeStampedModel):
-    text = models.TextField(max_length=500)
-    datetime = models.DateTimeField(blank=True, auto_now_add=True)
-    # appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE,null=True, blank=True)
-    is_accepted = models.BooleanField(default=None)
-
-    def __str__(self):
-        return "Notification: " + str(self.text)
 
     # def save(self, *args, **kwargs):
     #     if self.is_accepted != None:
@@ -109,6 +113,15 @@ class Notification(TimeStampedModel):
     #         notifications_obj.save()
 
         # super().save(*args, **kwargs)
+
+class Notification(TimeStampedModel):
+    text = models.TextField(max_length=500)
+    datetime = models.DateTimeField(blank=True, auto_now_add=True)
+    appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE,null=True, blank=True)
+    is_accepted = models.BooleanField(default=None)
+
+    def __str__(self):
+        return "Notification: " + str(self.text)
 
 class UserQuery(TimeStampedModel):
     name = models.CharField(max_length=1024, blank=True, null=True)

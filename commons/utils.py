@@ -1,6 +1,6 @@
 from django.db import models
 from account.models import User
-
+from app.settings import EMAIL_HOST_USER
 class TimeStampedModel(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE,null=True,blank=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
@@ -45,7 +45,7 @@ class Util:
             to=[email], 
             body=message, 
             subject=subject, 
-            from_email=settings.EMAIL_HOST_USER
+            from_email=EMAIL_HOST_USER
         )
         EmailThread(email).start()
     
