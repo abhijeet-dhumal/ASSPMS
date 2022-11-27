@@ -28,7 +28,7 @@
 
 ## Env file
 ```
-SECRET_KEY = ""
+SECRET_KEY = "django-insecure-t_3epnw-h0p@i1ttylhmnn3@#oo1@+t!t7(e#vvespx-s7%*iu"
 DEBUG=True
 ALLOWED_HOSTS='*'
 DEPLOYMENT=False
