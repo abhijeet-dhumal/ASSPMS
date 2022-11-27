@@ -91,26 +91,23 @@ class User(AbstractUser):
 
     objects = UserManager()
 
-class RequestUpdateProfile(models.Model):
-    user_type = models.CharField(
-        max_length=520, blank=True, choices=CATEGORY, default='User')
-    name = models.CharField(max_length=520, blank=True, null=True)
-    company = models.CharField(max_length=520, blank=True, null=True)
-    experience = models.CharField(
-        max_length=520, blank=True, choices=EXP, default='0')
-    starting_charge_price = models.FloatField(blank=True, null=True)
-    mode_of_service = models.CharField(
-        max_length=520, blank=True, choices=MODE, default='None')
-    dob = models.DateField(blank=True, null=True)
-    preferred_name = models.CharField(
-        max_length=520, blank=True, null=True)
-    pronoun = models.CharField(max_length=520, blank=True, null=True)
-    location = models.CharField(max_length=1024, blank=True, null=True)
-    description = models.TextField(blank=True, null=True)
-    profile_image = models.ImageField(
-        blank=True, null=True, upload_to='profile/%Y%m%d')
 
-    def __str__(self):
-        return "Update Request From: " + self.name
-
-
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+@receiver(post_save, sender=User)
+def update_licenseplatetext(sender, instance, **kwargs):
+    if instance.license_plate_text == None and instance.vehicle_image:
+        img_url=instance.vehicle_image.url
+        text=str(img_url)[1:]
+        print(text)
+        texts=list()
+        for template in license_plate_text_detection(text):
+            texts.append(template['prediction'][0]['ocr_text'])
+        instance.license_plate_text=texts[0]
+        print(f'Found texts in this image are : {texts}')
+        try: 
+            user=User.objects.filter(license_plate_text=texts[0])[0]
+            instance.user=user
+        except Exception as e:
+            print(e)
+        instance.save()

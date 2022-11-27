@@ -96,8 +96,8 @@
     <div class="container-fluid" style="align-items: center;justify-content: center;margin-top:5vh; margin-bottom:5vh;">
         <div class="header" style="margin-left:10vw;">
             <span style="font-size: 2rem;">User Record form </span><br>
-            <span><a href="{% url 'user_appointments' %}" class="mx-3">Appointment slots</a></span>
-            <span><a href="{% url 'user_records' %}">Back</a></span>
+            <!-- <span><a href="{% url 'user_appointment_slots' %}" class="mx-3">Appointment slots</a></span> -->
+            <span><a href="{{request.META.HTTP_REFERER}}">Back</a></span>
             <hr>
             {% if recordform.errors %}
             {% for field in recordform %}

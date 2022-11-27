@@ -12,8 +12,9 @@ class TimeStampedModel(models.Model):
 from rest_framework import serializers 
 
 from django.core.mail import EmailMessage
-
-
+from django.core.mail import EmailMultiAlternatives
+from email.mime.image import MIMEImage 
+import os
 import threading
 from django.conf import settings
 
@@ -40,14 +41,36 @@ class Util:
         return f"{email}-{settings.SECRET_KEY}"
 
     @staticmethod
-    def send_email(email, subject, message):
-        email = EmailMessage(
+    def send_email(email, subject, message,img_path=None,instance=None):
+        body_html = f'''
+        <html>
+            <body>
+                <h2>Admin Survelliance</h2>
+                <p>License plate text : {instance.licenseplatetext}</p>
+                <p>Entry time : {instance.created_at}</p>
+                <p>Exit time : {instance.exit_time}</p>
+                <p>Amount paid : {instance.amount_paid}</p>
+            </body>
+        </html>
+        '''
+
+        msg = EmailMultiAlternatives(
             to=[email], 
             body=message, 
             subject=subject, 
             from_email=EMAIL_HOST_USER
         )
-        EmailThread(email).start()
+
+        msg.mixed_subtype = 'related'
+        msg.attach_alternative(body_html, "text/html")
+        image_name=img_path.split("/")[-1]
+        with open(img_path, 'rb') as f:
+            img = MIMEImage(f.read())
+            img.add_header('Content-ID', '<{name}>'.format(name=image_name))
+            img.add_header('Content-Disposition', 'inline', filename=image_name)
+        msg.attach(img)
+
+        EmailThread(msg).start()
     
     @staticmethod
     def base64_to_file(data,url_address=None):

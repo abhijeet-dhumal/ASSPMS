@@ -9,6 +9,8 @@ from rest_framework.response import Response
 from datetime import datetime, timedelta
 from django.shortcuts import render, redirect
 from django.utils import timezone
+from django.contrib import messages
+from django.http import HttpResponse
 
 from services.models import (
     Appointment,
@@ -118,13 +120,15 @@ class AppointmentSlotCreateView(CreateView):
 
 def AppointmentSlotUpdate(request,pk):
     instance = get_object_or_404(AppointmentSlot, id=pk)
-    recordform=AppointmentSlotForm(request.POST or None, instance=instance)
+    recordform=AppointmentSlotForm(instance=instance)
 
-    if recordform.is_valid():
-        recordform.save()
-        instance.updated_at=timezone.now()
-        instance.save()
-        return redirect('user_records')
+    if request.method=='POST':
+        recordform=AppointmentSlotForm(request.POST,request.FILES,instance=instance)
+        if recordform.is_valid():
+            recordform.save()
+            return redirect('user_appointment_slots')
+        else:
+            return HttpResponse(request,"Appointment slot already booked or enter valid details !!!")
     
     context={'recordform':recordform,'record':instance}
     return render(request,"services/user_record_update.html",context)
@@ -152,6 +156,7 @@ class AppointmentListView(ListView):
             # If not searched, return default posts
             posts = Appointment.objects.filter(created_by=request.user).order_by('-created_at')
         return posts
+        
 class AppointmentCreateView(CreateView):
     model = Appointment
     template_name = 'services/user_records.html'
@@ -161,15 +166,20 @@ class AppointmentCreateView(CreateView):
     def get_success_url(self):
         return reverse('user_appointments')
 
+
 def AppointmentUpdate(request,pk):
     instance = get_object_or_404(Appointment, id=pk)
-    recordform=AppointmentForm(request.POST or None, instance=instance)
+    recordform=AppointmentForm(instance=instance)
 
-    if recordform.is_valid():
-        recordform.save()
-        instance.updated_at=timezone.now()
-        instance.save()
-        return redirect('user_records')
+    if request.method=='POST':
+        recordform=AppointmentForm(request.POST,request.FILES,instance=instance)
+        if recordform.is_valid():
+            recordform.save()
+            instance.updated_at=timezone.now()
+            instance.save()
+            return redirect('user_appointments')
+        else:
+            messages.warning(request,f'Please enter valid details !!! ')
     
     context={'recordform':recordform,'record':instance}
     return render(request,"services/user_record_update.html",context)

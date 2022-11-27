@@ -17,7 +17,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
 from commons.utils import Util
-from account.models import RequestUpdateProfile, User
+from account.models import User
 
 from account.serializers import (
     RequestUpdateProfileSerializer,
@@ -224,6 +224,6 @@ class APIChangePasswordView(generics.UpdateAPIView):
 
 class RequestUpdateProfileView(generics.CreateAPIView):
     serializer_class = RequestUpdateProfileSerializer
-    queryset = RequestUpdateProfile.objects.all()
+    queryset = User.objects.all()
     permission_classes = (IsAuthenticated,)
 

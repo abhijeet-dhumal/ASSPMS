@@ -10,27 +10,20 @@ class UserRecordForm(forms.ModelForm):
         model = UserRecord
         fields = '__all__'
 
-import datetime
+import pytz, datetime
+utc = pytz.utc
 class AppointmentSlotForm(forms.ModelForm):
-    date = forms.DateField(initial=datetime.date.today, widget=forms.widgets.DateInput(attrs={'type': 'date'}))
+    date = forms.DateField(initial=datetime.date.today, widget=forms.widgets.DateInput(attrs={'type': 'date'}),)
+    start_time = forms.TimeField(widget=forms.widgets.TimeInput(format='%I:%M %P',attrs={'placeholder': 'HH:MM am/pm'}))
+    end_time = forms.TimeField(widget=forms.widgets.TimeInput(format='%I:%M %P',attrs={'placeholder': 'HH:MM am/pm'}))
+
     class Meta:
         model = AppointmentSlot
         fields = '__all__'
-        widgets = {
-            'start_time': forms.TextInput(
-                attrs={'placeholder': 'HH:MM AM/PM'}),
-            'end_time': forms.TextInput(
-                attrs={'placeholder': 'HH:MM AM/PM'}),
-        }
+
 
 class AppointmentForm(forms.ModelForm):
-    date = forms.DateField(initial=datetime.date.today, widget=forms.widgets.DateInput(attrs={'type': 'date'}))
     class Meta:
         model = Appointment
         fields = '__all__'
-        widgets = {
-            'start_time': forms.TextInput(
-                attrs={'placeholder': 'HH:MM AM/PM'}),
-            'end_time': forms.TextInput(
-                attrs={'placeholder': 'HH:MM AM/PM'}),
-        }
+        

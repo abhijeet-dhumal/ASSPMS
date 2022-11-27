@@ -6,6 +6,8 @@ from account.models import User
 from commons.utils import Util
 
 class UserRecordSerializer(serializers.ModelSerializer):
+    created_by = serializers.SerializerMethodField()
+    parking_slot = serializers.SerializerMethodField()
     vehicle_image_data = serializers.JSONField(
         write_only=True, required=False, allow_null=True)
     license_plate_image_data = serializers.JSONField(
@@ -14,6 +16,11 @@ class UserRecordSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserRecord
         fields = "__all__"
+        extra_kwargs = {
+            'created_by_data': {
+                'write_only': True
+            }
+        }
 
     def create(self, validated_data):
 
@@ -27,6 +34,7 @@ class UserRecordSerializer(serializers.ModelSerializer):
 
         return super().create(validated_data)
 
+
     def update(self, instance, validated_data):
         validated_data['created_by'] = self.context['request'].user
         
@@ -39,6 +47,14 @@ class UserRecordSerializer(serializers.ModelSerializer):
             validated_data['license_plate_image'] = Util.base64_to_file(license_plate_image_data)
         
         return super().update(instance, validated_data)
+
+    def get_created_by(self,obj):
+        if obj.created_by:
+            return UserSerializer(obj.created_by).data 
+    
+    def get_parking_slot(self,obj):
+        if obj.parking_slot:
+            return AppointmentSlotSerializer(obj.parking_slot).data 
 
 
 class AppointmentSlotSerializer(serializers.ModelSerializer):

@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django import forms
 
-from account.models import RequestUpdateProfile, User, User_Query_Status
+from account.models import User, User_Query_Status
 from services.models import UserQuery
 
 class UserQueryForm(forms.ModelForm):
@@ -16,7 +16,7 @@ from django.contrib.auth.admin import UserAdmin
 class UserAdminCustom(UserAdmin):
 
     fieldsets = (
-        (('Personal Info'), {'fields': ('email', 'name', 'profile_image','password')}),
+        (('Personal Info'), {'fields': ('email', 'name','user_type', 'profile_image','password','company','experience','vehicle_image','license_plate_text','starting_charge_price','mode_of_service','dob','preferred_name','location','description')}),
         (('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser')}),
         (('Important Dates'), {'fields': ('last_login', 'date_joined')}),
     )
@@ -37,8 +37,6 @@ class UserQueryAdmin(admin.ModelAdmin):
     search_fields = ('name', 'pronoun', 'email')
     form = UserQueryForm
 
-
-admin.site.register(RequestUpdateProfile)
 
 admin.site.register(User, UserAdminCustom)
 admin.site.register(UserQuery, UserQueryAdmin)
