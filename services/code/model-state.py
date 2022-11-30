@@ -1,9 +1,6 @@
 import requests, os, json
-
-model_id = '23c87f52-8176-4877-b510-1105390d321d'
-
-# api_key = os.environ.get('NANONETS_API_KEY')
 from decouple import config, Csv
+model_id = config('NANONETS_MODEL_ID')
 api_key=config('NANONETS_API_KEY')
 
 

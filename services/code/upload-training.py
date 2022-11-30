@@ -1,11 +1,10 @@
 import os, requests, json
 from tqdm import tqdm
 
-pathToAnnotations = 'annotations/json'
-pathToImages = 'media/license_plate_images'
-
+pathToAnnotations = '/home/akshay-abhi/repos/ASSPMS/app/services/annotations/json'
+pathToImages = '/home/akshay-abhi/repos/ASSPMS/app/media/license_plate_images/'
+# print(BASE_DIR, pathToImages)
 from decouple import config, Csv
-from oauth2_provider import settings as oauth2_settings
 import os
 model_id = config('NANONETS_MODEL_ID')
 api_key = config('NANONETS_API_KEY')
@@ -17,7 +16,7 @@ for root, dirs, files in os.walk(pathToAnnotations, topdown=False):
         imageName, ext = name.split(".")
         if imageName == "":
             continue
-        imagePath = os.path.join(pathToImages, imageName + '.jpg')
+        imagePath = os.path.join(pathToImages+imageName + '.jpg')
         jsonData = annotation.read()
         url = f'https://app.nanonets.com/api/v2/ObjectDetection/Model/{model_id}/UploadFile/'
         data = {'file' :open(imagePath, 'rb'),  'data' :('', '[{"filename":"' + imageName+".jpg" + '", "object": '+ jsonData+'}]'),   'modelId' :('', model_id)}       

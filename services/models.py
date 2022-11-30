@@ -152,7 +152,22 @@ def update_licenseplatetext(sender, instance, **kwargs):
                 print("entered if")
                 for slot in AppointmentSlot.objects.filter(is_available=True):
                     instance.parking_slot=slot 
-                    print(instance.parking_slot)
+                    print("enetered for loop")
+                    try:
+                        Appointment.objects.create(
+                            slot=slot,
+                            vehicle_image=instance.vehicle_image,
+                            created_by=instance.created_by
+                        )
+                    except Exception as e:
+                        print("Unable to create appointment !",e)
+                    try:
+                        slot.is_available=False
+                        slot.save("Unable to create appointment slot is available !",e)
+                    except Exception as e:
+                        print("")
+                    break 
+                    # print(instance.parking_slot)
 
         except Exception as e:
             print(e)

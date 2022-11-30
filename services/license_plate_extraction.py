@@ -46,11 +46,11 @@ def number_plate_text(image_url):
 
     # Run tesseract OCR on image
     text = pytesseract.image_to_string(new_image, config=config)
-    print(text)
+#     print(text)
     #Data is stored in CSV file
     raw_data = {'date': [time.asctime( time.localtime(time.time()) )], 
             'v_number': [text]}
-    print(raw_data)
+#     print(raw_data)
     df = pd.DataFrame(raw_data, columns = ['date', 'v_number'])
     df.to_csv('data.csv')
 

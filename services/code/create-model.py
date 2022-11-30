@@ -1,6 +1,6 @@
 import requests, os, json
 from decouple import config, Csv
-from oauth2_provider import settings as oauth2_settings
+
 import os  
 url = "https://app.nanonets.com/api/v2/ObjectDetection/Model/"
 api_key = config('NANONETS_API_KEY')

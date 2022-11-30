@@ -99,7 +99,7 @@ def update_licenseplatetext(sender, instance, **kwargs):
     if instance.license_plate_text == None and instance.vehicle_image:
         img_url=instance.vehicle_image.url
         text=str(img_url)[1:]
-        print(text)
+
         texts=list()
         for template in license_plate_text_detection(text):
             texts.append(template['prediction'][0]['ocr_text'])
