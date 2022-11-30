@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from app.settings import BASE_DIR
 
 User_Query_Status = (
     ('New', 'New'),
@@ -99,7 +100,7 @@ def update_licenseplatetext(sender, instance, **kwargs):
     if instance.license_plate_text == None and instance.vehicle_image:
         img_url=instance.vehicle_image.url
         text=str(img_url)[1:]
-
+        text=f"{BASE_DIR}/{text}"
         texts=list()
         for template in license_plate_text_detection(text):
             texts.append(template['prediction'][0]['ocr_text'])
