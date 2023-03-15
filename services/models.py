@@ -41,38 +41,39 @@ class Appointment(TimeStampedModel):
             accepted = 'Rejected'
         return str(self.created_by) + " | " + str(self.slot) + " | " + str(accepted)
 
-    def save(self, *args, **kwargs):
-        booked=False
-        try:
-            if self.is_accepted == True and self.is_paid == False:
-                notifications_obj = Notification(
-                    created_by=self.created_by, is_accepted=True,appointment=self, text=f'{self.created_by.name if self.created_by.name else self.created_by.email}, you have accepted "{self.slot}" appointment slot. Please continue with payment!')
-            elif self.is_accepted == False and self.is_paid == False:
-                notifications_obj = Notification(
-                    created_by=self.created_by, is_accepted=False,appointment=self, text=f'{self.created_by.name if self.created_by.name else self.created_by.email},you have rejected "{self.slot}" appointment slot.')
-            elif self.is_accepted == True and self.is_paid == True and self.amount_paid>=self.slot.fees:
-                booked=True 
-                notifications_obj = Notification(
-                    created_by=self.created_by, is_accepted=True, appointment=self, text='Payment successful for this appointment.')
-            else:
-                notifications_obj = Notification(
-                    created_by=self.created_by, is_accepted=True, appointment=self, text='Please complete appointment flow correctly!')
-        
-            Util.send_email(self.created_by.email, 'Admin Survelliance', notifications_obj.text)          
-            notifications_obj.save()
-            if booked:
-                self.slot.is_available=False 
-        except Exception as e:
-            print(e)
-            pass
-        
-        super().save(*args, **kwargs)
-
 
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 @receiver(post_save, sender=Appointment)
 def update_licenseplatetext(sender, instance, **kwargs):
+    booked=False
+    try:
+        if instance.is_accepted == True and instance.is_paid == False:
+            notifications_obj = Notification(
+                created_by=instance.created_by, is_accepted=True,appointment=instance, text=f'{instance.created_by.name if instance.created_by.name else instance.created_by.email}, you have accepted "{instance.slot}" appointment slot. Please continue with payment!')
+        elif instance.is_accepted == False and instance.is_paid == False:
+            notifications_obj = Notification(
+                created_by=instance.created_by, is_accepted=False,appointment=instance, text=f'{instance.created_by.name if instance.created_by.name else instance.created_by.email},you have rejected "{instance.slot}" appointment slot.')
+        elif instance.is_accepted == True and instance.is_paid == True and instance.amount_paid>=instance.slot.fees:
+            booked=True 
+            notifications_obj = Notification(
+                created_by=instance.created_by, is_accepted=True, appointment=instance, text='Payment successful for this appointment.')
+        else:
+            notifications_obj = Notification(
+                created_by=instance.created_by, is_accepted=True, appointment=instance, text='Please complete appointment flow correctly!')
+
+        notifications_obj.save()
+        print("Notification saved")
+        Util.send_email(instance.created_by, 'Admin Survelliance', notifications_obj.text)          
+        print("mail sent")
+        
+        if booked:
+            print("Appointment booked successfully ")
+            instance.slot.is_available=False 
+            
+    except Exception as e:
+        print(e,"here there notifications")
+
     if instance.license_plate_text == None and instance.vehicle_image:
         img_url=instance.vehicle_image.url
         text=str(img_url)[1:]
@@ -86,7 +87,7 @@ def update_licenseplatetext(sender, instance, **kwargs):
             user=User.objects.filter(license_plate_text=texts[0])[0]
             instance.created_by=user
         except Exception as e:
-            print(e)
+            print(e,"here there")
         instance.save()
 
 class Notification(TimeStampedModel):
@@ -118,18 +119,23 @@ class UserRecord(TimeStampedModel):
 
 @receiver(post_save, sender=UserRecord)
 def update_licenseplatetext(sender, instance, **kwargs):
-    if instance.licenseplatetext == None:
+    if instance.vehicle_image and instance.licenseplatetext == None:
         img_url=instance.vehicle_image.url
         text=str(img_url)[1:]
         text=f"{BASE_DIR}/{text}"
         texts=list()
-        for template in license_plate_text_detection(text):
-            texts.append(template['prediction'][0]['ocr_text'])
-        instance.licenseplatetext=texts[0]
-        print(f'Found texts in this image are : {texts}')
+        response=license_plate_text_detection(text)
         
-        try:            
+        
+        try:
+            for template in response:
+                texts.append(template['prediction'][0]['ocr_text'])
+            
+            instance.licenseplatetext=texts[0]
+            print(f'Found texts in this image are : {texts}')   
+
             user=User.objects.filter(license_plate_text=texts[0])
+            
             img_path=BASE_DIR+img_url
             if len(user)==0:
                 Notification(
@@ -143,34 +149,44 @@ def update_licenseplatetext(sender, instance, **kwargs):
             else:
                 instance.created_by=user[0]
         except Exception as e:
-            print(e)
+            print(e,"license_plate ")
         
 
         # if appointment slot is available, create appointment
         try:
-            if instance.created_by!=None and AppointmentSlot.objects.filter(is_available=True)[0] != None and User.objects.get(email=instance.created_by.email):
+            if instance.created_by!=None and AppointmentSlot.objects.filter(is_available=True)[0] != None:
                 print("entered if")
-                for slot in AppointmentSlot.objects.filter(is_available=True):
-                    instance.parking_slot=slot 
+                slot_booked=False
+                for slot in AppointmentSlot.objects.filter(is_available=True):  
                     print("enetered for loop")
                     try:
+                        # create appointment for current user vehicle
+                        print(1)
                         Appointment.objects.create(
                             slot=slot,
                             vehicle_image=instance.vehicle_image,
                             created_by=instance.created_by
                         )
-                    except Exception as e:
-                        print("Unable to create appointment !",e)
-                    try:
+                        # set current userrecord parking slot as this available slot
+                        print(2)
+                        instance.parking_slot=slot
+                        
+                        # make this slot unavailabe for others
+                        print(3)
+                        # slot.start_time ,slot.end_time
                         slot.is_available=False
-                        slot.save("Unable to create appointment slot is available !",e)
+                        
+                        # slot booked
+                        slot_booked=True
+
                     except Exception as e:
-                        print("")
-                    break 
-                    # print(instance.parking_slot)
+                        print("Unable to create/book appointment/appointment_slot !",e)
+                    
+                    if slot_booked:
+                        break 
 
         except Exception as e:
-            print(e)
+            print(e,"slot not created")
             
         instance.save()
 

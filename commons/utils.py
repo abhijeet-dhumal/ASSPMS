@@ -17,6 +17,7 @@ from email.mime.image import MIMEImage
 import os
 import threading
 from django.conf import settings
+from app.settings import BASE_DIR
 
 class EmailThread(threading.Thread):
 
@@ -41,21 +42,20 @@ class Util:
         return f"{email}-{settings.SECRET_KEY}"
 
     @staticmethod
-    def send_email(email, subject, message,img_path=None,instance=None):
+    def send_email(user, subject, message,img_path=None,instance=None):
         body_html = f'''
         <html>
             <body>
                 <h2>Admin Survelliance</h2>
-                <p>License plate text : {instance.licenseplatetext}</p>
-                <p>Entry time : {instance.created_at}</p>
-                <p>Exit time : {instance.exit_time}</p>
-                <p>Amount paid : {instance.amount_paid}</p>
+                <p>License plate text : {user.license_plate_text}</p>
+                <p>Entry time : {user.created_at}</p>
             </body>
         </html>
         '''
+        print(body_html)
 
         msg = EmailMultiAlternatives(
-            to=[email], 
+            to=[user.email], 
             body=message, 
             subject=subject, 
             from_email=EMAIL_HOST_USER
@@ -63,7 +63,13 @@ class Util:
 
         msg.mixed_subtype = 'related'
         msg.attach_alternative(body_html, "text/html")
-        image_name=img_path.split("/")[-1]
+        if img_path :
+            image_name=img_path.split("/")[-1]
+        else:
+            img_path=f"{BASE_DIR}/{user.vehicle_image.url}"
+            image_name=img_path.split("/")[-1]
+
+            
         with open(img_path, 'rb') as f:
             img = MIMEImage(f.read())
             img.add_header('Content-ID', '<{name}>'.format(name=image_name))
@@ -78,13 +84,18 @@ class Util:
         import base64
         import six
         import uuid
+        import time
+        
         if data != None:
+            
+            named_tuple = time.localtime() # get struct_time
+            time_string = time.strftime("%m/%d/%Y, %H:%M:%S", named_tuple)
             try:
-                format, uri = data['uri'].split(';base64,')
-                file = ContentFile(base64.b64decode(uri), name=data['name'])
+                format, uri = data.split(';base64,')
+                file = ContentFile(base64.urlsafe_b64decode(uri), name=f"VehicleImage-{time_string}.{format.split('/')[-1]}")
             except Exception as e:
                 file_name = str(uuid.uuid4())[:12] 
-                decoded_file=base64.b64decode(data)
+                decoded_file=base64.urlsafe_b64decode(data)
                 extension = url_address.split("/")[-1].split(".")[-1]
                 complete_file_name = f"{file_name}.{extension}"
 
