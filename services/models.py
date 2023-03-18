@@ -64,8 +64,10 @@ def update_licenseplatetext(sender, instance, **kwargs):
 
         notifications_obj.save()
         print("Notification saved")
-        Util.send_email(instance.created_by, 'Admin Survelliance', notifications_obj.text)          
-        print("mail sent")
+
+        if instance.vehicle_image and instance.license_plate_text!=None:
+            Util.send_email(instance.created_by.email, 'Admin Survelliance', notifications_obj.text,instance,BASE_DIR+instance.vehicle_image.url)          
+            print("mail sent")
         
         if booked:
             print("Appointment booked successfully ")
@@ -144,8 +146,7 @@ def update_licenseplatetext(sender, instance, **kwargs):
                 )
                 Util.send_email('slyntherianknight@gmail.com',
                  'Admin Survelliance',
-                 "Unregistered user entered in survelliance  camera !",
-                 img_path, instance)
+                 "Unregistered user entered in survelliance  camera !", instance,img_path)
             else:
                 instance.created_by=user[0]
         except Exception as e:
@@ -178,6 +179,7 @@ def update_licenseplatetext(sender, instance, **kwargs):
                         
                         # slot booked
                         slot_booked=True
+                        break 
 
                     except Exception as e:
                         print("Unable to create/book appointment/appointment_slot !",e)

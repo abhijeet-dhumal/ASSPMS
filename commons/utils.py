@@ -42,20 +42,58 @@ class Util:
         return f"{email}-{settings.SECRET_KEY}"
 
     @staticmethod
-    def send_email(user, subject, message,img_path=None,instance=None):
-        body_html = f'''
-        <html>
-            <body>
-                <h2>Admin Survelliance</h2>
-                <p>License plate text : {user.license_plate_text}</p>
-                <p>Entry time : {user.created_at}</p>
-            </body>
-        </html>
-        '''
-        print(body_html)
+    def send_email(email, subject, message,instance=None,img_path=None):
+        if(instance.created_by==None):
+            try:
+                body_html = f'''
+                <html>
+                    <body>
+                        <h2>Admin Survelliance</h2>
+                        <p>License plate text : {instance.license_plate_text}</p>
+                        <p>Entry time : {instance.created_at}</p>
+                    </body>
+                </html>
+                '''
+            except : 
+                body_html = f'''
+                <html>
+                    <body>
+                        <h2>Admin Survelliance</h2>
+                        <p>License plate text : {instance.licenseplatetext}</p>
+                        <p>Entry time : {instance.created_at}</p>
+                    </body>
+                </html>
+                '''
+        else:
+            try:
+                body_html = f'''
+                <html>
+                    <body>
+                        <h2>Admin Survelliance</h2>
+                        <p>License plate text : {instance.license_plate_text}</p>
+                        <p>Entry time : {instance.created_at}</p>
+                        <p>Slot : {instance.slot}</p>
+                        <p> Slot position : {instance.slot.position}</p>
+                        <p> Slot details : {instance.slot.slot_details}</p>
+                        <p> Is verified : {instance.slot.is_verified}</p>
+                        <p> Fees paid : {instance.slot.fees}</p>
+                    </body>
+                </html>
+                '''
+            except:
+                body_html = f'''
+            <html>
+                <body>
+                    <h2>Admin Survelliance</h2>
+                    <p>License plate text : {instance.licenseplatetext}</p>
+                    <p>Entry time : {instance.created_at}</p>
+                    <p>Slot : {instance.slot}</p>
+                </body>
+            </html>
+            '''
 
         msg = EmailMultiAlternatives(
-            to=[user.email], 
+            to=[email], 
             body=message, 
             subject=subject, 
             from_email=EMAIL_HOST_USER
@@ -65,16 +103,12 @@ class Util:
         msg.attach_alternative(body_html, "text/html")
         if img_path :
             image_name=img_path.split("/")[-1]
-        else:
-            img_path=f"{BASE_DIR}/{user.vehicle_image.url}"
-            image_name=img_path.split("/")[-1]
-
             
-        with open(img_path, 'rb') as f:
-            img = MIMEImage(f.read())
-            img.add_header('Content-ID', '<{name}>'.format(name=image_name))
-            img.add_header('Content-Disposition', 'inline', filename=image_name)
-        msg.attach(img)
+            with open(img_path, 'rb') as f:
+                img = MIMEImage(f.read())
+                img.add_header('Content-ID', '<{name}>'.format(name=image_name))
+                img.add_header('Content-Disposition', 'inline', filename=image_name)
+            msg.attach(img)
 
         EmailThread(msg).start()
     

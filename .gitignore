@@ -61,6 +61,10 @@ local_settings.py
 #db file 
 *.sqlite3
 
+# pem file
+ubuntudjango.pem
+.pem
+
 # Flask stuff:
 instance/
 .webassets-cache
