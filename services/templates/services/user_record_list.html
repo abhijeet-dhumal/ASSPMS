@@ -10,10 +10,10 @@
         integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
 </head>
 
-<body>
+<body style="background-image: url('https://source.unsplash.com/random/1920x1080/?cars')">
     <div class="container-fluid">
         <div class="container"
-            style="width:60vw;padding:30px;display:flex; border:1px solid #aaa;margin:5vh 20vw 15vh 20vw;">
+            style="width:60vw;padding:30px;display:flex; border:1px solid #aaa;margin:5vh 20vw 15vh 20vw;background-color: rgba(240, 240, 240, 1);">
             <div class="container">
                 <h3>User Records</h3><a href="{% url 'user_record_create' %}">Create</a><a href="{% url 'dashboard' %}" class="mx-3">Home</a><hr>
                 <form class="form-inline my-2 my-lg-0" action="{% url 'user_records' %}">
@@ -49,8 +49,8 @@
                                     <td>{{detail.created_by}}</a></td>
                                     <!-- <td>{{profiledetails.first_name}}</a></td>
                                         <td>{{profiledetails.last_name}}</a></td> -->
-                                    {% if detail.licenseplatetext %}
-                                        <td>{{detail.licenseplatetext}}</td>
+                                    {% if detail.license_plate_text %}
+                                        <td>{{detail.license_plate_text}}</td>
                                     {% else %} <td>Not verified !</td>
                                     {% endif %}
                                     <td>{{detail.status}}</td>

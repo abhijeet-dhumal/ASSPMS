@@ -46,7 +46,10 @@ THIRD_PARTY_APPS = [
     'oauth2_provider',
     'social_django',
     'drf_social_oauth2',
+    'crispy_forms'
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 LOCAL_APPS = [
     'account.apps.AccountConfig',

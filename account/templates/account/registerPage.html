@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Myform/SignUp</title>
+    <title>ASSPMS/SignUp</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
         integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -10,15 +10,16 @@
         integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
 </head>
 
-<body>
+<body style="background-color: #16a085;">
     <div class="container-fluid">
-        <div class="container" style="padding:30px; border:1px solid #aaa;width:50%;margin-top:1%;">
+        <div class="container" style="background-color: white;padding:30px; border:1px solid #aaa;width:50%;margin-top:1%;">
             <div class="container">
                 <div class="container-fluid header" style="align-items: center;">
                     <h3>SignUp</h3><a href="{% url 'home' %}"><p>Home</p></a>
                     <hr>
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
+                        {% load crispy_forms_tags %}
                         {% if form1.errors or patient_reg_form.errors %}
                         {% for field in form1 %}
                         {% for error in field.errors %}
@@ -49,8 +50,8 @@
                         {% endfor %}
     
                         {% endif %}
-                        {{form1.as_p}}
-                        {{doctor_reg_form.as_p}}
+                        {{form1 |crispy}}
+                        {{doctor_reg_form |crispy}}
 
                         <!-- <p><label for="email">First name : &nbsp;</label>{{registerform.first_name}}</p>
                         <p><label for="email">last name : &nbsp;</label>{{registerform.last_name}}</p>

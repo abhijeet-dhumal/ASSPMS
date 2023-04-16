@@ -92,19 +92,15 @@
     </script>
 </head>
 
-<body>
+<body style="background-image: url('https://source.unsplash.com/random/1920x1080/?cars');">
     <div class="container-fluid" style="align-items: center;justify-content: center;margin-top:5vh; margin-bottom:5vh;">
         <div class="header" style="margin-left:10vw;">
-            <span style="font-size: 2rem;">User Record form </span><br>
-            <!-- <span><a href="{% url 'user_appointment_slots' %}" class="mx-3">Appointment slots</a></span> -->
-            <span><a href="{{request.META.HTTP_REFERER}}">Back</a></span>
-            <hr>
             {% if recordform.errors %}
             {% for field in recordform %}
             {% for error in field.errors %}
             <div class="container my-2">
                 <div class="alert {{ message.tags }} alert-dismissible " role="alert"
-                    style="border:1px solid #aaa;padding:20px;">
+                    style="background-color: rgba(240, 240, 240, 1);border:1px solid #aaa;padding:20px;">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -115,7 +111,7 @@
             {% endfor %}
             {% endif %}
         </div>
-        <div class="container" style="margin-left:10%;border:1px solid #aaa;padding:40px;">
+        <div class="container" style="background-color: rgba(240, 240, 240, 1);margin-left:10%;border:1px solid #aaa;padding:40px;">
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="row">
@@ -132,8 +128,11 @@
 
                     </div>
                     <div class="col-md-8">
-
-                        {{recordform.as_p}}
+                        <span><a href="{{request.META.HTTP_REFERER}}"
+                            style=" border:1px solid grey;padding:5px;float:right;margin-right:10%;">Back</a></span>
+                        <br><br>
+                        {% load crispy_forms_tags %}
+                        {{recordform|crispy}}
                         <input type="Submit" value="Submit" />
                     </div>
 

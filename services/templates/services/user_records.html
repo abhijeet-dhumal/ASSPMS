@@ -10,15 +10,16 @@
         integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
 </head>
 
-<body>
+<body style="background-image: url('https://source.unsplash.com/random/1920x1080/?cars');">
     <div class="container-fluid">
-        <div class="container" style="width:50vw;padding:30px;display:flex; border:1px solid #aaa;margin:5vh 20vw 15vh 20vw;">
+        <div class="container" style="background-color: rgba(240, 240, 240, 1);width:50vw;padding:30px;display:flex; border:1px solid #aaa;margin:5vh 20vw 15vh 20vw;">
             <div class="container">
                 <h3>Edit Form</h3>
                 <a href="{{request.META.HTTP_REFERER}}">Go back</a>
                 <hr>
                 <form method="post" enctype="multipart/form-data">{% csrf_token %}
-                    {{ form.as_p }}
+                    {% load crispy_forms_tags %}
+                    {{ form|crispy }}
                     <input type="submit" value="Save">
                 </form>
             </div>

@@ -19,14 +19,9 @@ from django.contrib.auth.forms import ReadOnlyPasswordHashField, UserChangeForm
 from django.urls import reverse_lazy
 
 class UserEditForm(forms.ModelForm):
-    password = ReadOnlyPasswordHashField(label=_("Password"),
-        help_text=_("Raw passwords are not stored, so there is no way to see "
-                    "this user's password, but you can change the password "
-                    "using <a href=\"password/\">this form</a>."))
-
     class Meta:
         model = User
-        fields = '__all__'
+        fields = ('email','user_type','name','company','experience','mode_of_service','dob','preferred_name','location','description','profile_image','vehicle_image','license_plate_text')
 
     def __init__(self, *args, **kwargs):
         super(UserEditForm, self).__init__(*args, **kwargs)

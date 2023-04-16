@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Myform</title>
+    <title>ASSPMS</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
         integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -10,12 +10,12 @@
         integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
 </head>
 
-<body>
+<body style="background-image: url('https://source.unsplash.com/random/1920x1080/?cars');" >
     <div class="container-fluid" style="margin-top:5vw;">
-        <div class="container" style="border:1px solid #aaa;padding:50px;">
+        <div class="container" style="border:1px solid #aaa;padding:50px;background-color: rgba(240, 240, 240, 0.9);">
             <form method="POST" action="">
                 {% csrf_token %}
-                <p>Areyou sure you want to delete "{{obj}}" ?</p>
+                <p>Are you sure you want to delete "{{obj}}" ?</p>
                 <a href="{{request.META.HTTP_REFERER}}">Go back</a>
                 <input type="submit" value="Confirm" />
             </form>
