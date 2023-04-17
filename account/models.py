@@ -3,6 +3,10 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from app.settings import BASE_DIR
 
+# /postgres related
+from commons.PostgresDataTime import DateTimeWithoutTZField as DateTimeField
+
+
 User_Query_Status = (
     ('New', 'New'),
     ('InProgress', 'InProgress'),
@@ -85,8 +89,8 @@ class User(AbstractUser):
         blank=True, null=True, upload_to='profile/%Y%m%d')
     vehicle_image=models.ImageField(blank=True, null=True, upload_to='user_vehicle_images/%Y%m%d')
     license_plate_text=models.CharField(max_length=120, blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True, null=True)
-    updated_at = models.DateTimeField(auto_now=True, null=True)
+    created_at = DateTimeField(auto_now_add=True, null=True)
+    updated_at = DateTimeField(auto_now=True, null=True)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
