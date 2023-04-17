@@ -19,7 +19,7 @@ PROJECT_DIR = Path(__file__).parent
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'django-insecure-t_3epnw-h0p@i1ttylhmnn3@#oo1@+t!t7(e#vvespx-s7%*iu'
 DEBUG = True
-ALLOWED_HOSTS = ['.vercel.app','.now.sh']
+ALLOWED_HOSTS = ['*']
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -104,22 +104,22 @@ WSGI_APPLICATION = 'app.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
 DATABASES = {
     'default': {
-        'ENGINE': config('ENGINE'),
-        'NAME': config('NAME'),
-        'USER' : config('USER'),
-        'PASSWORD' : config('PASSWORD'),
-        'HOST': config('HOST'),
-        'PORT' : config('PORT')
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': config('ENGINE'),
+#         'NAME': config('NAME'),
+#         'USER' : config('USER'),
+#         'PASSWORD' : config('PASSWORD'),
+#         'HOST': config('HOST'),
+#         'PORT' : config('PORT')
+#     }
+# }
 
 # import dj_database_url
 # DATABASES = {'default': dj_database_url.parse('postgres://user:password@host:post/database')}
@@ -182,12 +182,12 @@ EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
 EMAIL_USE_SSL = config('EMAIL_USE_SSL', cast=bool)
 
 
-# HTTPS settings
-SESSION_COOKIE_SECURE=True
-CSRF_COOKIE_SECURE=True
-SECURE_SSL_REDIRECT=True
+# # HTTPS settings
+# SESSION_COOKIE_SECURE=True
+# CSRF_COOKIE_SECURE=True
+SECURE_SSL_REDIRECT=False
 
-# HSTS Settings
-SECURE_HSTS_SECONDS=3153600
-SECURE_HSTS_PRELOAD=True 
-SECURE_HSTS_INCLUDE_SUBDOMAINS=True
+# # HSTS Settings
+# SECURE_HSTS_SECONDS=3153600
+# SECURE_HSTS_PRELOAD=True 
+# SECURE_HSTS_INCLUDE_SUBDOMAINS=True

@@ -37,8 +37,13 @@ def RegisterForm(request):
             # form.save()
             user = form.save()
             user.refresh_from_db()  # load the profile instance created by the signal
-            username = form.cleaned_data.get('username')
-            
+            username = form.cleaned_data.get('email')
+            password = form.cleaned_data.get('password1')
+            # print(username,password)
+            user = authenticate(request, username = username , password = password)     
+            if user is not None:
+                login(request, user)
+                return redirect('dashboard')
             messages.success(request, 'Account is created for ' , username)
 
             return redirect('LoginForm')  

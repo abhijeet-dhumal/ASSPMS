@@ -22,10 +22,16 @@
     LogOut option  -->
     <div class="container" style="justify-content: center;align-items: center;margin-top: 8%;">
         
-        <div class="container col-md-6" style="background-color: rgba(240, 240, 240, 0.9);padding:30px;border:1px solid #aaa;margin-top: 10px;">
+        <div class="container col-md-6" style="background-color: rgba(240, 240, 240, 0.95);padding:30px;border:1px solid #aaa;margin-top: 10px;">
             <div class="container">
                 <h3>Hello {{request.user}} !!!</h3>
+                {% if request.user.is_staff %}
                 <a href="{% url 'user_records' %}" class="mx-2">UserRecords</a>
+                <a href="{% url 'user_appointment_slots' %}">Appointment slots</a>
+                {% else %}
+                <a href="{% url 'user_appointments' %}">Appointments</a>
+                {% endif %}
+                <a href="{% url 'user_notifications' %}" class="mx-2">Notifications</a>
                 <a href="{% url 'logoutuser' %}" class="mx-2">LogOut</a>
             </div>
             <hr>

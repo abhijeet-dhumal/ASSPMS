@@ -2,7 +2,8 @@ from random import choices
 from django.db import models
 from account.models import User
 from commons.utils import TimeStampedModel
-from commons.PostgresDataTime import DateTimeWithoutTZField as DateTimeField
+from decouple import config, Csv
+# from commons.PostgresDataTime import DateTimeWithoutTZField as DateTimeField
 
 from app.settings import BASE_DIR
 STATUS = (
@@ -96,7 +97,7 @@ def update_licenseplatetext(sender, instance, **kwargs):
 
 class Notification(TimeStampedModel):
     text = models.TextField(max_length=500)
-    datetime = DateTimeField(blank=True, auto_now_add=True)
+    datetime = models.DateTimeField(blank=True, auto_now_add=True)
     appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE,null=True, blank=True)
     is_accepted = models.BooleanField(default=None)
 
@@ -146,7 +147,7 @@ def update_licenseplatetext(sender, instance, **kwargs):
                     created_by=User.objects.get(id=1),
                     text='Unregistered user entered in survelliance  camera !'
                 )
-                Util.send_email('slyntherianknight@gmail.com',
+                Util.send_email(config('EMAIL_HOST_USER'),
                  'Admin Survelliance',
                  "Unregistered user entered in survelliance  camera !", instance,img_path)
             else:
@@ -190,8 +191,7 @@ def update_licenseplatetext(sender, instance, **kwargs):
                         break 
 
         except Exception as e:
-            print(e,"slot not created")
-            
+            print(e,"slot not created") 
         instance.save()
 
 
