@@ -17,8 +17,8 @@ import os
 
 PROJECT_DIR = Path(__file__).parent
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SECRET_KEY = config('SECRET_KEY')
-DEBUG = config('DEBUG', default=False, cast=bool)
+SECRET_KEY = 'django-insecure-t_3epnw-h0p@i1ttylhmnn3@#oo1@+t!t7(e#vvespx-s7%*iu'
+DEBUG = True
 ALLOWED_HOSTS = ['.vercel.app','.now.sh']
 
 
