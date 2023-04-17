@@ -166,7 +166,6 @@ class AppointmentCreateView(CreateView):
     def get_success_url(self):
         return reverse('user_appointments')
 
-
 def AppointmentUpdate(request,pk):
     instance = get_object_or_404(Appointment, id=pk)
     recordform=AppointmentForm(instance=instance)

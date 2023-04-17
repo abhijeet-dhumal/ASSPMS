@@ -60,7 +60,11 @@ def update_licenseplatetext(sender, instance, **kwargs):
         elif instance.is_accepted == True and instance.is_paid == True and instance.amount_paid>=instance.slot.fees:
             booked=True 
             notifications_obj = Notification(
-                created_by=instance.created_by, is_accepted=True, appointment=instance, text='Payment successful for this appointment.')
+                created_by=instance.created_by, is_accepted=True, appointment=instance, text='Payment successful for this appointment,Appointment booked successfully..')
+        elif instance.is_accepted == True and instance.slot.fees==0:
+            booked=True 
+            notifications_obj = Notification(
+                created_by=instance.created_by, is_accepted=True, appointment=instance, text='Appointment booked successfully.')
         else:
             notifications_obj = Notification(
                 created_by=instance.created_by, is_accepted=True, appointment=instance, text='Please complete appointment flow correctly!')

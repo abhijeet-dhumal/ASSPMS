@@ -140,7 +140,58 @@
                     <input type="Submit" value="Submit" />
                 </div>
             </form>
+            <br><br><hr>
+            <div>
+                <div class="box my-3">
+                    <h3>Appointments</h3>
+                    <div class="content" style="align-items:center;text-align:center;">
+
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Slot</th>
+                                    <!-- <th scope="col">Firstname</th>
+                                        <th scope="col">Lastname</th> -->
+                                    <th scope="col">Is paid</th>
+                                    <th scope="col">Amount(Rs)</th>
+                                    <th scope="col"></th>
+                                    <th scope="col"></th>
+                
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if appointments %}
+                                {% for detail in appointments %}
+                                <tr>
+                                    
+                                    <th scope="row">{{detail.id}}</th>
+                                    <td>{{detail.slot}}</a></td>
+                                    <!-- <td>{{profiledetails.first_name}}</a></td>
+                                        <td>{{profiledetails.last_name}}</a></td> -->
+                                    <td>{{detail.is_paid}}</td>
+                                    
+                                    <td>{{detail.amount}}</td>
+                                    <td>{{detail.is_verified}}</td>
+                                                   
+                                    <td><a href="{% url 'user_appointments_update' detail.id %}">Update</a></td>
+                                    <td><a href="{% url 'user_appointments_delete' detail.id %}">Delete</a></td>
+                                    
+                                </tr>
+                                {% endfor %}
+                                {% else %}
+                                <div class="container-fluid" style="align-items: center;text-align: center;">
+                                    <p>No records found !!! </p>
+                                </div>
+                                {% endif %}
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
         </div>
+        
 
     </div>
     <script>

@@ -23,6 +23,10 @@ class AppointmentSlotForm(forms.ModelForm):
 
 
 class AppointmentForm(forms.ModelForm):
+    date = forms.DateField(initial=datetime.date.today, widget=forms.widgets.DateInput(attrs={'type': 'date'}),)
+    start_time = forms.TimeField(widget=forms.widgets.TimeInput(format='%I:%M %P',attrs={'placeholder': 'HH:MM am/pm'}))
+    end_time = forms.TimeField(widget=forms.widgets.TimeInput(format='%I:%M %P',attrs={'placeholder': 'HH:MM am/pm'}))
+
     class Meta:
         model = Appointment
         fields = '__all__'

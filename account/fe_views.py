@@ -66,10 +66,16 @@ def dashboard(request):
     context={'request':request,'users':users}
     return render(request,"account/UserDashboard.html",context)
 
+from services.models import Appointment
 @login_required
 def userdetails(request,pk):
-    userdetail=User.objects.get(id=pk)    
+    userdetail=User.objects.get(id=pk) 
     registerform=UserEditForm(instance=userdetail)
+    # try:
+    appointments = Appointment.objects.filter(created_by=User.objects.get(id=pk))
+    print(appointments)
+    # except : 
+    #     pass
     if request.method=='POST':
         registerform=UserEditForm(request.POST,request.FILES,instance=userdetail)
         if registerform.is_valid():
@@ -79,7 +85,9 @@ def userdetails(request,pk):
             messages.warning(request,f'Username or Password is incorrect !!! ')
 
 
-    context={'userdetail':userdetail,'registerform':registerform,'files':request.FILES}
+    context={'userdetail':userdetail,'registerform':registerform,'files':request.FILES,'appointments':appointments}
+    # if(appointments):
+    # context['appointments']=appointments
     return render(request,"account/userdetailsform.html",context)
 
 @login_required
