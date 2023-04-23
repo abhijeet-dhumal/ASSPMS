@@ -13,6 +13,8 @@ def home(request):
     return render(request,"account/home.html",context)
 
 def LoginForm(request):
+    if(request.user.is_authenticated):
+        return redirect('dashboard')
     try:
         if request.method =='POST':
             username = request.POST.get('username')
