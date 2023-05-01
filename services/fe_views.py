@@ -50,7 +50,10 @@ class UserRecordsListView(ListView):
             posts = UserRecord.objects.filter(Q(created_by__email__icontains=search_post) | Q(licenseplatetext__icontains=search_post) | Q(status__icontains=search_post)).order_by('-created_at')
         else:
             # If not searched, return default posts
-            posts = UserRecord.objects.filter(created_by=request.user).order_by('-created_at')
+            if request.user.is_admin:
+                posts = UserRecord.objects.all().order_by('-created_at')
+            else:
+                posts = UserRecord.objects.filter(created_by=request.user).order_by('-created_at')
         return posts
 
 class AppointmentSlotsListView(ListView):

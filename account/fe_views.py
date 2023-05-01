@@ -31,6 +31,8 @@ def LoginForm(request):
     return render(request,"account/LoginForm.html",context)
 
 def RegisterForm(request):
+    if(request.user.is_authenticated):
+        return redirect('dashboard')
     if request.method=='POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
@@ -40,7 +42,11 @@ def RegisterForm(request):
             username = form.cleaned_data.get('username')
             
             messages.success(request, 'Account is created for ' , username)
-
+            password = form.cleaned_data.get('password')
+            user = authenticate(request, username = username , password = password)     
+            if user is not None:
+                login(request, user)
+                return redirect('dashboard')
             return redirect('LoginForm')  
     else:
         form = UserRegisterForm()

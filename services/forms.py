@@ -13,10 +13,6 @@ class UserRecordForm(forms.ModelForm):
 import pytz, datetime
 utc = pytz.utc
 class AppointmentSlotForm(forms.ModelForm):
-    date = forms.DateField(initial=datetime.date.today, widget=forms.widgets.DateInput(attrs={'type': 'date'}),)
-    start_time = forms.TimeField(widget=forms.widgets.TimeInput(format='%I:%M %P',attrs={'placeholder': 'HH:MM am/pm'}))
-    end_time = forms.TimeField(widget=forms.widgets.TimeInput(format='%I:%M %P',attrs={'placeholder': 'HH:MM am/pm'}))
-
     class Meta:
         model = AppointmentSlot
         fields = '__all__'

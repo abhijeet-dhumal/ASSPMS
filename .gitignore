@@ -12,7 +12,7 @@ media/
 
 # Distribution / packaging
 .Python
-env/
+nenv/
 build/
 develop-eggs/
 dist/

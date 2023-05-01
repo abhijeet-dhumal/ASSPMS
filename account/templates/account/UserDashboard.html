@@ -24,8 +24,13 @@
         
         <div class="container col-md-6" style="background-color: rgba(240, 240, 240, 0.9);padding:30px;border:1px solid #aaa;margin-top: 10px;">
             <div class="container">
-                <h3>Hello {{request.user}} !!!</h3>
+                <h4>Hello {% if user.first_name and user.last_name %}{{user.first_name}} {{user.last_name}}{% else %}{{user.email}}{% endif %} !!!</h4>
                 <a href="{% url 'user_records' %}" class="mx-2">UserRecords</a>
+                {% if request.user.is_staff %}
+                <a href="{% url 'user_appointment_slots' %}" class="mx-2">Appointment slots</a>
+                {% else %}
+                <a href="{% url 'user_appointments' %}" class="mx-2">Appointments</a>
+                {% endif %}
                 <a href="{% url 'logoutuser' %}" class="mx-2">LogOut</a>
             </div>
             <hr>
