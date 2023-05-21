@@ -21,7 +21,7 @@ from django.urls import reverse_lazy
 class UserEditForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ('email','user_type','first_name','last_name','dob','location','description','profile_image','vehicle_image','license_plate_text')
+        fields = ('email','user_type','first_name','last_name','dob','location','profile_image','vehicle_image','license_plate_text')
 
     def __init__(self, *args, **kwargs):
         super(UserEditForm, self).__init__(*args, **kwargs)

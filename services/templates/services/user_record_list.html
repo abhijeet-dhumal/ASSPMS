@@ -12,13 +12,13 @@
 
 <body style="background-image: url('https://source.unsplash.com/random/1920x1080/?cars')">
     <div class="container-fluid">
-        <div class="container"
-            style="width:60vw;padding:30px;display:flex; border:1px solid #aaa;margin:5vh 20vw 15vh 20vw;background-color: rgba(240, 240, 240, 1);">
+        <div class="container col-md-10"
+            style="margin-top:5vh; padding:30px;display:flex; border:1px solid #aaa;background-color: rgba(240, 240, 240, 1);">
             <div class="container">
                 <h3>User Records</h3><a href="{% url 'user_record_create' %}">Create</a><a href="{% url 'dashboard' %}" class="mx-3">Home</a><hr>
                 <form class="form-inline my-2 my-lg-0" action="{% url 'user_records' %}">
                     <input class="form-control mr-sm-2" type="search"   placeholder="Search" aria-label="Search" name="search">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                    <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
                 </form><hr>
                 <div class="box">
 

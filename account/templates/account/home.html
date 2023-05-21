@@ -26,7 +26,8 @@ body {
 }
 
 header {
-	background-color: #fff;
+	background-color: rgba(0,0,0,0.9);
+	color:white;
 	padding: 20px;
 	display: flex;
 	justify-content: center;
@@ -52,6 +53,7 @@ main {
 	justify-content: center;
 	height: 100%;
     margin: auto;
+	color:white;
 }
 
 h2 {
@@ -141,9 +143,9 @@ p {
         <center><h2>Welcome to IOT Based Automatic Security Surveillance and Parking Management Application !</h2></center>
         <p>Sign up or register to get started!</p>
         <div class="buttons">
-          <a href="{%url 'LoginForm'%}" class="button signup">Sign In</a>
-          <a href="{%url 'RegisterForm'%}" class="button register">Register</a>
-          <a href="{%url 'schema-swagger-ui'%}" class="button swagger"
+          <a href="/login/" class="button signup">Sign In</a>
+          <a href="/register/" class="button register">Register</a>
+          <a href="/docs" class="button swagger"
             >SwaggerUi</a
           >
         </div>

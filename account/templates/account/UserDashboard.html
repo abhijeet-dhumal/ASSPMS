@@ -20,7 +20,7 @@
     userdetails edit options in edit option
     on delete user details will be deleted 
     LogOut option  -->
-    <div class="container" style="justify-content: center;align-items: center;margin-top: 8%;">
+    <div class="container" style="justify-content: center;align-items: center;margin-top: 10vh;">
         
         <div class="container col-md-6" style="background-color: rgba(240, 240, 240, 0.9);padding:30px;border:1px solid #aaa;margin-top: 10px;">
             <div class="container">
@@ -31,12 +31,13 @@
                 {% else %}
                 <a href="{% url 'user_appointments' %}" class="mx-2">Appointments</a>
                 {% endif %}
+                <a href="{% url 'user_notifications' %}" class="mx-2">Notifications</a>
                 <a href="{% url 'logoutuser' %}" class="mx-2">LogOut</a>
             </div>
             <hr>
             <form class="form-inline my-2 my-lg-0 d-flex" action="{% url 'dashboard' %}">
                 <input class="form-control mr-sm-2 mx-2" style="width:min-content;" type="search"   placeholder="Search" aria-label="Search" name="search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
             </form><hr>
             <div class="row">
                 <div class="col-md-6">
