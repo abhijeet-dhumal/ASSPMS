@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>ASSPMS</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css"
+        integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+</head>
+
+<body style="background-image: url('https://source.unsplash.com/random/1920x1080/?cars')">
+    <div class="container-fluid">
+        <div class="container col-md-10"
+            style="margin-top:5vh; padding:30px;display:flex; border:1px solid #aaa;background-color: rgba(240, 240, 240, 1);">
+            <div class="container">
+                <h3>User Records</h3><a href="{% url 'user_record_create' %}">Create</a><a href="{% url 'dashboard' %}" class="mx-3">Home</a><hr>
+                <form class="form-inline my-2 my-lg-0" action="{% url 'user_records' %}">
+                    <input class="form-control mr-sm-2" type="search"   placeholder="Search" aria-label="Search" name="search">
+                    <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
+                </form><hr>
+                <div class="box">
+
+                    <div class="content" style="align-items:center;text-align:center;">
+
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">User</th>
+                                    <!-- <th scope="col">Firstname</th>
+                                        <th scope="col">Lastname</th> -->
+                                    <th scope="col">License plate</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Created_at</th>
+                                    <th scope="col">Updated_at</th>
+                                    <th scope="col"></th>
+                                    <th scope="col"></th>
+                
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if object_list %}
+                                {% for detail in object_list %}
+                                <tr>
+                                    
+                                    <th scope="row">{{detail.id}}</th>
+                                    <td>{{detail.created_by}}</a></td>
+                                    <!-- <td>{{profiledetails.first_name}}</a></td>
+                                        <td>{{profiledetails.last_name}}</a></td> -->
+                                    {% if detail.license_plate_text %}
+                                        <td>{{detail.license_plate_text}}</td>
+                                    {% else %} <td>Not verified !</td>
+                                    {% endif %}
+                                    <td>{{detail.status}}</td>
+                                    <td>{{detail.created_at}}</td>
+                                    <td>{{detail.updated_at}}</td>
+                                                   
+                                    <td><a href="{% url 'user_record_update' detail.id %}">Update</a></td>
+                                    <td><a href="{% url 'user_record_delete' detail.id %}">Delete</a></td>
+                                    
+                                </tr>
+                                {% endfor %}
+                                {% else %}
+                                <div class="container-fluid" style="align-items: center;text-align: center;">
+                                    <p>No records found !!! </p>
+                                </div>
+                                {% endif %}
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- Optional Javascript -->
+    <!-- for dissimisible alert box  -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
+        crossorigin="anonymous"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            $('.alert').alert()
+        })
+    </script>
+
+</body>
+
+</html>

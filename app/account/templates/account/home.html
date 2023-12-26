@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SmartPark360</title>
+    <style>
+        * {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	font-family: 'Roboto', sans-serif;
+	font-size: 16px;
+	line-height: 1.5;
+	color: #333;
+	/* background-color: #f9f9f9; */
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	height: 100vh;
+    background-image: url('https://source.unsplash.com/random/1920x1080/?cars') no-repeat center center fixed;
+}
+
+header {
+	background-color: rgba(0,0,0,0.9);
+	color:white;
+	padding: 20px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+}
+
+h1 {
+	font-size: 32px;
+	font-weight: bold;
+}
+
+main {
+	padding: 40px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+    background-color: rgba(0,0,0,0.8);
+	justify-content: center;
+	height: 100%;
+    margin: auto;
+	color:white;
+}
+
+h2 {
+	font-size: 24px;
+	margin-bottom: 20px;
+}
+
+p {
+	font-size: 16px;
+	margin-bottom: 40px;
+	text-align: center;
+}
+
+.buttons {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
+.button {
+	display: inline-block;
+	background-color: #4CAF50;
+	border: none;
+	color: white;
+	padding: 12px 24px;
+	text-align: center;
+	text-decoration: none;
+	font-size: 16px;
+	margin: 10px;
+	cursor: pointer;
+	border-radius: 5px;
+	transition: background-color 0.2s;
+}
+
+.button:hover {
+	background-color: #3e8e41;
+}
+
+.signup {
+	background-color: #4CAF50;
+}
+
+.register {
+	background-color: #f44336;
+}
+.swagger {
+        background-color: #2f67bb;
+      }
+
+@media (max-width: 768px) {
+	h1 {
+		font-size: 24px;
+	}
+	
+	main {
+		padding: 20px;
+	}
+	
+	h2 {
+		font-size: 20px;
+		margin-bottom: 10px;
+	}
+	
+	p {
+		font-size: 14px;
+		margin-bottom: 20px;
+	}
+	
+	.buttons {
+		flex-direction: column;
+		align-items: center;
+	}
+	
+	.button {
+		margin: 5px;
+	}
+}
+
+    </style>
+  </head>
+  <body  style="background-image: url('https://source.unsplash.com/random/1920x1080/?cars')">
+    <header>
+      <h1>SmartPark360</h1>
+    </header>
+    <main>
+      <div class="center" style="justify-content: center;">
+        <center><h2>Welcome to IOT Based Automatic Security Surveillance and Parking Management Application !</h2></center>
+        <p>Sign up or register to get started!</p>
+        <div class="buttons">
+          <a href="/login/" class="button signup">Sign In</a>
+          <a href="/register/" class="button register">Register</a>
+          <a href="/docs" class="button swagger"
+            >SwaggerUi</a
+          >
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
