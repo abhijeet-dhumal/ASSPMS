@@ -84,6 +84,7 @@ EMAIL_USE_SSL=False
 
 ## Using Containerization
 - Just install Container engine (Docker/Podman) on your local system and run below command : 
+
 `podman run --rm -d -it -p 8000:8000 --name asspms quay.io/abdhumal/asspms:0.0.1`
 
 or
