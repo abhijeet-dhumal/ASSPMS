@@ -90,3 +90,7 @@ EMAIL_USE_SSL=False
 or
 
 `podman run --rm -d -it -p 8000:8000 --name asspms docker.io/abhijeetdhumal0798/asspms:0.0.2`
+
+## Default Credentials
+Admin credentials (email/password) : `admin@gmail.com` / `Abhijeet`
+Simple user Credentails : `user1@gmail.com` / `Abhijeet`
