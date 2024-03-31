@@ -1,6 +1,4 @@
-## ASSPMS Backend
 ## ASSSPMS :- Automatic Securuity Survelliance and Parking Management System
-## Development Setup
 
 ### Local Setup
 
@@ -86,5 +84,5 @@ EMAIL_USE_SSL=False
 
 ## Using Containerization
 - `podman run --rm -d -it -p 8000:8000 --name asspms quay.io/abdhumal/asspms:0.0.1`
-- or
+or
 - `podman run --rm -d -it -p 8000:8000 --name asspms docker.io/abhijeetdhumal0798/asspms:0.0.2`
