@@ -93,4 +93,5 @@ or
 
 ## Default Credentials
 Admin credentials (email/password) : `admin@gmail.com` / `Abhijeet`
+
 Simple user Credentails : `user1@gmail.com` / `Abhijeet`
