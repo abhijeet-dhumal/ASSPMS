@@ -83,6 +83,9 @@ EMAIL_USE_SSL=False
 - `http://127.0.0.1:8000/docs/`
 
 ## Using Containerization
-- `podman run --rm -d -it -p 8000:8000 --name asspms quay.io/abdhumal/asspms:0.0.1`
+- Just install Container engine (Docker/Podman) on your local system and run below command : 
+`podman run --rm -d -it -p 8000:8000 --name asspms quay.io/abdhumal/asspms:0.0.1`
+
 or
-- `podman run --rm -d -it -p 8000:8000 --name asspms docker.io/abhijeetdhumal0798/asspms:0.0.2`
+
+`podman run --rm -d -it -p 8000:8000 --name asspms docker.io/abhijeetdhumal0798/asspms:0.0.2`
