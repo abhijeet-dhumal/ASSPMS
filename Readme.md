@@ -29,10 +29,15 @@ Purpose : To build an automated application which can be used to monitor and man
 
 ## Using container
 
-- `podman build -t asspms .  `
-- `podman run -d -it -p 8000:8000 --name asspms localhost/asspms:latest`
-- To add sample data in database storage (admin@gmail.com | Abhijeet) - `podman exec -it asspms python manage.py loaddata dumpdata.json`
-- In case want to use your own data (create your own admin user) - `podman exec -it asspms python manage.py createsuperuser`
+- `podman build -t asspms .` # to build Custom container-image using Dockerfile
+- `podman run -d -it -p 8000:8000 --name asspms localhost/asspms:latest` # to run custom container-image
+- To run application, just install Container engine (Docker/Podman) on your local system and run below command : 
+
+`podman run --rm -d -it -p 8000:8000 --name asspms quay.io/abdhumal/asspms:0.0.1`
+
+or
+
+`podman run --rm -d -it -p 8000:8000 --name asspms docker.io/abhijeetdhumal0798/asspms:0.0.2`
 
 
 
@@ -86,15 +91,6 @@ EMAIL_USE_SSL=False
 
 ## Public API reference used for OCR 
 - `https://github.com/NanoNets/nanonets-ocr-sample-python`
-
-## Using Containerization
-- Just install Container engine (Docker/Podman) on your local system and run below command : 
-
-`podman run --rm -d -it -p 8000:8000 --name asspms quay.io/abdhumal/asspms:0.0.1`
-
-or
-
-`podman run --rm -d -it -p 8000:8000 --name asspms docker.io/abhijeetdhumal0798/asspms:0.0.2`
 
 ## Default Credentials
 Admin credentials (email/password) : `admin@gmail.com` / `Abhijeet`
