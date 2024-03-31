@@ -1,4 +1,6 @@
 ## ASSSPMS :- Automatic Securuity Survelliance and Parking Management System
+This Application is built with Django and Rest API framework which enables Hardware (Camera Sensor and Microcontroller) to interact with webserver using REST API protocol
+Purpose : To build an automated application which can be used to monitor and manage Security Surveillance and Parking Management by reducing relative human efforts required by great margin.
 
 ### Local Setup
 
@@ -81,6 +83,9 @@ EMAIL_USE_SSL=False
 
 ## API Documentation
 - `http://127.0.0.1:8000/docs/`
+
+## Public API reference used for OCR 
+- `https://github.com/NanoNets/nanonets-ocr-sample-python`
 
 ## Using Containerization
 - Just install Container engine (Docker/Podman) on your local system and run below command : 
