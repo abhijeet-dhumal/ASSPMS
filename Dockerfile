@@ -10,6 +10,7 @@ RUN pip install -r requirements.txt
 
 WORKDIR /app
 COPY run.sh .
+COPY .env .
 
 RUN chmod +x run.sh
 

@@ -3,10 +3,13 @@
 python manage.py makemigrations
 python manage.py migrate --no-input
 
-#create default admin user
-echo "from django.contrib.auth import get_user_model; CustomUser = get_user_model();  CustomUser.objects.create_superuser('admin@gmail.com', 'admin_password')" | python manage.py shell
-#create default simple user
-echo "from django.contrib.auth import get_user_model; CustomUser = get_user_model();  CustomUser.objects.create_user('simple_user@gmail.com', 'simple_user_password')" | python manage.py shell
+# #create default admin user
+# echo "from django.contrib.auth import get_user_model; CustomUser = get_user_model();  CustomUser.objects.create_superuser('admin@gmail.com', 'admin_password')" | python manage.py shell
+# #create default simple user
+# echo "from django.contrib.auth import get_user_model; CustomUser = get_user_model();  CustomUser.objects.create_user('simple_user@gmail.com', 'simple_user_password')" | python manage.py shell
+
+#load default data
+python app/manage.py loaddata dumpdata.json
 
 gunicorn app.wsgi:application --bind 0.0.0.0:8000 &
 
