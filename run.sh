@@ -9,7 +9,7 @@ python manage.py migrate --no-input
 # echo "from django.contrib.auth import get_user_model; CustomUser = get_user_model();  CustomUser.objects.create_user('simple_user@gmail.com', 'simple_user_password')" | python manage.py shell
 
 #load default data
-python app/manage.py loaddata dumpdata.json
+python manage.py loaddata dumpdata.json
 
 gunicorn app.wsgi:application --bind 0.0.0.0:8000 &
 
