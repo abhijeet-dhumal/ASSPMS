@@ -1,4 +1,4 @@
-## ASSSPMS :- IOT based Automatic Securuity Survelliance and Parking Management System
+## ASSSPMS :- IOT based Automatic Security Surveillance and Parking Management System
 - This Application is built with Django and Rest API framework which enables Hardware (Camera Sensor and Microcontroller) to interact with webserver using REST API protocol
 - Purpose : To build an automated application which can be used to monitor and manage Security Surveillance and Parking Management by reducing relative human efforts required by great margin.
 - [Published Journal](https://www.ijera.com/papers/vol13no4/1304171177.pdf)
@@ -96,4 +96,4 @@ EMAIL_USE_SSL=False
 ## Default Credentials
 Admin credentials (email/password) : `admin@gmail.com` / `Abhijeet`
 
-Simple user Credentails : `user1@gmail.com` / `Abhijeet`
+Simple user Credentials : `user1@gmail.com` / `Abhijeet`
